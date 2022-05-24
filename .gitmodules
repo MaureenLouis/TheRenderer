@@ -1,0 +1,19 @@
+[submodule "Renderer/3rdParty/GLFW"]
+	path = Renderer/3rdParty/GLFW
+	url = https://gitclone.com/github.com/TheCherno/glfw.git
+[submodule "Renderer/3rdParty/glm"]
+	path = Renderer/3rdParty/glm
+	url = https://hub.fastgit.xyz/Groovounet/glm.git
+[submodule "Renderer/3rdParty/tabulate"]
+	path = Renderer/3rdParty/tabulate
+	url = https://hub.fastgit.xyz/p-ranav/tabulate.git
+[submodule "Renderer/3rdParty/spdlog"]
+	path = Renderer/3rdParty/spdlog
+	url = https://hub.fastgit.xyz/gabime/spdlog.git
+[submodule "Renderer/3rdParty/imgui"]
+	path = Renderer/3rdParty/imgui
+	url = https://hub.fastgit.xyz/TheCherno/imgui.git
+	branch = docking
+[submodule "Renderer/3rdParty/eigen"]
+	path = Renderer/3rdParty/eigen
+	url = https://gitlab.com/libeigen/eigen.git

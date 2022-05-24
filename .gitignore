@@ -1,0 +1,9 @@
+.git
+.vs
+bin
+int
+*.sln
+Renderer/imgui.ini
+Renderer/Renderer.vcxproj
+Renderer/Renderer.vcxproj.filters
+Renderer/Renderer.vcxproj.user
