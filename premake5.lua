@@ -17,10 +17,12 @@ IncludeDir["tabula"] = "Renderer/3rdParty/tabulate/include"
 IncludeDir["spdlog"] = "Renderer/3rdParty/spdlog/include"
 IncludeDir["imgui"]  = "Renderer/3rdParty/imgui"
 IncludeDir["stbimage"] = "Renderer/3rdParty/stbimage/include"
+IncludeDir["assimp"] = "Renderer/3rdParty/assimp/include"
 
 include "Renderer/3rdParty/GLFW"
 include "Renderer/3rdParty/GLAD"
 include "Renderer/3rdParty/imgui"
+include "renderer/3rdParty/assimp"
 
 project "Renderer"
     location "Renderer"
@@ -44,7 +46,8 @@ project "Renderer"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.stbimage}"
+		"%{IncludeDir.stbimage}",
+		"%{IncludeDir.assimp}"
 	}
 	
 	pchheader "stdafx.h"
@@ -58,7 +61,8 @@ project "Renderer"
 		"GLAD",
 	    "opengl32.lib",
 		"imgui",
-		"Pathcch.lib"
+		"Pathcch.lib",
+		"assimp"
 	}
 
     filter "system:windows"
