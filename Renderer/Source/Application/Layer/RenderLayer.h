@@ -27,7 +27,9 @@ public:
 	virtual void onUpdate(double deltaTime) override;
 	virtual void onEvent(Event& event) override;
 
+#if 0
 	glm::vec3 getArcballVector(double x, double y);
+#endif
 
 private:
 	bool onMousePress(MousePressEvent& event);
@@ -51,25 +53,13 @@ public:
 	PointD _oldPos;
 	PointD _deltaPos;
 
-	float _theta = 0.f;
-    float _phi = 0.f;
-	float _rho = 5.f;
-
-	double _sensitivity = 0.3;
-
 	bool _rotateMode = false;
 
-	float _up = 1.0f;
 
-#if 0
-	glm::vec3 _pos = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 _target = glm::vec3(0.f, 0.f, 1.f);
-	glm::vec3 _up = glm::vec3(0.f, 1.f, 0.f);
-#endif
+
 	Unique<FpsCameraController> _controller;
 	Unique<TrackBall> _trackBall;
 
-	int _viewport[4];
 
 	float _cameraDist;
 };

@@ -2,6 +2,7 @@
 #include "TrackMode.h"
 #include "TrackBall.h"
 #include "Application/Application.h"
+#include "Application/Global/Config.h"
 
 void SphereMode::apply(TrackBall* trackBall, const glm::vec3& point)
 {
@@ -115,16 +116,24 @@ float TrackUtil::distance(const glm::vec3& p1, const glm::vec3& p2)
 	return glm::sqrt(sub.x * sub.x + sub.y * sub.y + sub.z * sub.z);
 }
 
-glm::vec3 TrackUtil::hitSphere(TrackBall* trackBall, const glm::vec3& p)
+glm::vec3 TrackUtil::mouseCoordToNormalDevCoord(const glm::vec3& p)
 {
-	glm::vec3 center = trackBall->center();
-
 	float width = (float)Application::get().window()->width();
 	float height = (float)Application::get().window()->height();
 
 
 	glm::vec3 mousePoint = glm::vec3(p.x / width * 2.f - 1.f, p.y / height * 2.f - 1.f, 0.f);
 	mousePoint.y = -mousePoint.y;
+
+	return mousePoint;
+}
+
+
+glm::vec3 TrackUtil::hitSphere(TrackBall* trackBall, const glm::vec3& p)
+{
+	glm::vec3 center = trackBall->center();
+
+	glm::vec3 mousePoint = TrackUtil::mouseCoordToNormalDevCoord(p);
 
 	float opSquared = (float)mousePoint.x * (float)mousePoint.x + (float)mousePoint.y * (float)mousePoint.y;
 
@@ -138,4 +147,56 @@ glm::vec3 TrackUtil::hitSphere(TrackBall* trackBall, const glm::vec3& p)
 	}
 
 	return mousePoint;
+}
+
+glm::vec3 TrackUtil::hitViewPlane(TrackBall* trackBall, const glm::vec3& p)
+{
+	Plane3<float> vp = trackBall->getViewPlane();
+	Line3<float, true> ln = trackBall->viewLineFromWindow(p);
+
+
+	glm::vec3 ponVp;
+	(void)TrackUtil::intersectionPlaneLine(vp, ln, ponVp);
+
+	return ponVp;
+}
+
+bool TrackUtil::intersectionPlaneLine(const Plane3<float>& pl, const Line3<float, true>& li, glm::vec3& pt)
+{
+	const float epsilon = float(1e-8);
+
+
+
+	float k = glm::dot(pl.direction(), li.direction());
+
+
+	if ((k > -epsilon) && (k < epsilon))
+	{
+		return false;
+	}
+
+	float r = (
+		pl.offset() - glm::dot(pl.direction(), li.origin())
+		) / k;
+
+	pt = li.origin() + li.direction() * r;
+
+	return true;
+}
+
+void PanMode::apply(TrackBall* trackBall, const glm::vec3& point)
+{
+	glm::vec3 hitOld = TrackUtil::hitViewPlane(trackBall, trackBall->lastPoint());
+	glm::vec3 hitNew = TrackUtil::hitViewPlane(trackBall, point);
+	glm::vec3 hitDelta = hitNew - hitOld;
+
+	float mouseSensitivity = Config::get()._mouseSensitivity;
+	hitDelta = hitDelta * mouseSensitivity * 5.f;
+
+	trackBall->translate(hitDelta);
+}
+
+void PanMode::draw()
+{
+
 }

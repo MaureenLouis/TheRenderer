@@ -3,8 +3,9 @@
 #include "Application/Application.h"
 #include "Renderer/RendererCore/Renderer.h"
 
+#include "Application/UI/ViewModeControl.h"
+
 UiLayer::UiLayer()
-   // :_windowHandle(windowHandle)
 {
 	_windowHandle = Application::getPtr()->windowHandle();
 }
@@ -62,7 +63,15 @@ void UiLayer::onUpdate(double deltaTime)
 {
 	UNUSED(deltaTime);
 
-	ImGui::Begin("Renderer");
+	// View mode
+	ViewmodeControl::draw();
+
+	DisplaySettings::draw();
+
+	MenuBar::draw();
+
+	// Information
+	ImGui::Begin("Information");
 	ImGui::Text("Vendor: %s\nRenderer: %s\nVersion: %s\nFps: %f",
 		Renderer::vender(), 
 		Renderer::rendererName(), 

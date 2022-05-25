@@ -37,3 +37,72 @@ void DisplaySettings::draw()
 	ImGui::End();
 
 }
+
+bool MenuBar::_showPreferenceWidget = false;
+
+void MenuBar::draw()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			drawFileMenu();
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			drawEditMenu();
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+}
+
+void MenuBar::drawFileMenu()
+{
+	if (ImGui::MenuItem("Close"))
+	{
+	
+	}
+}
+
+void MenuBar::drawEditMenu()
+{
+	if (ImGui::MenuItem("Preference"))
+	{
+		_showPreferenceWidget = true;
+	}
+
+#if 0
+	if (_showPreferenceWidget)
+	{
+		static const Config::VideoModes& videoModes = Config::get().videoModes();
+		static std::vector<const char*> videoModesStrList;
+		videoModesStrList.clear();
+
+		for (auto iter = videoModes.begin(); iter != videoModes.end(); iter++)
+		{
+			int width = iter->width;
+			int height = iter->height;
+			int refreshRate = iter->refreshRate;
+			static char buf[32] = { 0 };
+			sprintf(buf, "%dx%d@%dHz", width, height, refreshRate);
+			videoModesStrList.push_back(buf);
+		}
+
+		int currentVideoMode = Config::get().defaultVideoMode();
+
+		ImGui::Begin("Preference");
+		ImGui::ListBox("listbox", &currentVideoMode, videoModesStrList.data(), videoModesStrList.size(), 4);
+		ImGui::SameLine();
+		ImGui::End();
+
+		Config::get().setDefaultVideoMode(currentVideoMode);
+	}
+
+#endif
+}
+

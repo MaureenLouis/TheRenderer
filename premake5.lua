@@ -57,7 +57,8 @@ project "Renderer"
 	    "GLFW",
 		"GLAD",
 	    "opengl32.lib",
-		"imgui"
+		"imgui",
+		"Pathcch.lib"
 	}
 
     filter "system:windows"

@@ -12,39 +12,21 @@ public:
 	glm::vec3 _tra;        // Move
 
 public:
-	void setIdentity()
-	{
-		_rot = glm::angleAxis(glm::degrees(0.f), glm::vec3(0.f, 0.f, 0.f));
-
-		// _rot = glm::quat(0.f, 0.f, 0.f, 0.f);
-		_tra = glm::vec3(0.f);
-		_scale = 1.f;
-	}
-
-	glm::mat4 matrix()
-	{
-		// Translate * scale * rot;
-		glm::mat4 rotate = glm::toMat4(_rot);
-		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(_scale, _scale, _scale));
-		glm::mat4 translate = glm::translate(glm::mat4(1.f), _tra);
-
-		return scale * rotate * translate;
-	}
+	void setIdentity();
+	glm::mat4 matrix();
 };
 
 class Transform
 {
 protected:
 	glm::vec3  _center;
+	glm::mat4  _model;
+	glm::mat4  _project;
 	Similarity _track;
 	float      _radius;
+
 protected:
-	Transform()
-	{
-		_track.setIdentity();
-		_radius = 1.f;
-		_center = glm::vec3(0.f);
-	}
+	Transform();
 
 public:
 	const glm::vec3& center() const
@@ -62,6 +44,20 @@ public:
 		return _track;
 	}
 
+	glm::mat4& model()
+	{
+		return _model;
+	}
+
+	glm::mat4 project()
+	{
+		return _project;
+	}
+
+	glm::vec3 viewPoint()
+	{
+		return glm::vec3(glm::inverse(_model) * glm::vec4(-4.f, -4.f, -4.f, 0.f));
+	}
 };
 
 class TrackBall : public Transform
@@ -73,28 +69,38 @@ public:
 	~TrackBall();
 
 	void mouseDown(const PointF& point);
-	void mouseMove(const PointF& point);
+	void mouseMove(const PointF& point, int trackModeId);
 	void mouseScroll(RenderLayer* layer, float yOffset);
 
 	void draw();
+
+	void translate(const glm::vec3& pos);
 
 	const glm::vec3 lastPoint() const
 	{
 		return _lastPoint;
 	}
 
+	Similarity& lastTrack()
+	{
+		return _lastTrack;
+	}
 
+	Plane3<float> getViewPlane();
+
+	Line3<float, true> viewLineFromWindow(const glm::vec3& p);
+
+	glm::vec3 unProject(const glm::vec3& p);
 
 private:
 	void setDefaultMapping();
 	void setCurrentAction();
 
 private:
-	TrackMode* _trackMode;
+	TrackMode* _trackMode[3];
 
 	Similarity _lastTrack;
 
 	glm::vec3 _lastPoint;
 
-	// View      _camera;
-};
+}; 

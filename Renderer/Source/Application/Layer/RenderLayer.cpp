@@ -18,38 +18,13 @@ RenderLayer::RenderLayer()
 	_zAxisObject->setLineWidth(2.5f);
 	_zAxisObject->setScaled(0.1f);
 
-	int width = Application::getPtr()->window()->width();
-	int height = Application::getPtr()->window()->height();
+
 	//_camera = std::make_unique<PerspectiveCamera>(width, height, glm::vec3(2.f, 1.f, 2.f));
 
-
-	float x = _rho * glm::sin(glm::radians(_phi)) * glm::sin(glm::radians(_theta));
-	float z = _rho * glm::sin(glm::radians(_phi)) * glm::cos(glm::radians(_theta));
-	float y = _rho * glm::cos(glm::radians(_phi));
-
-	glm::vec3 pos(x, z, y);
-#if 0
-	_controller = std::make_unique<FpsCameraController>();
-
-
-	v = glm::lookAt(
-		glm::vec3(2.f, 1.f, 1.f),
-		glm::vec3(0.f, 0.f, 0.f),
-		glm::vec3(0.f, _up, 0.f));
-
-	v = glm::lookAt(
-		glm::vec3(2.f, 1.f, 1.f),
-		glm::vec3(0.f, 0.f, 0.f),
-		glm::vec3(0.f, _up, 0.f));
-#endif
-
-	p = glm::perspective(45.f, (float)width / (float)height, 0.1f, 100.f);
-	//p = glm::mat4(1.f);
-
-	// m = glm::mat4(1.f);
-	m = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
-
 	_trackBall = std::make_unique<TrackBall>();
+	m = _trackBall->model();
+
+	p = _trackBall->project();
 
 	_cameraDist = 1.75f / glm::tan(glm::radians(45.f * 0.5f));
 }
@@ -71,7 +46,6 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
-
 
 	static double runningTime = 0.0;
 	// static glm::vec3 pos = _camera->position();
@@ -134,53 +108,39 @@ void RenderLayer::onEvent(Event& event)
 	d.dispatch<MouseMoveEvent>(EVENT_CALLBACK(&Self::onMouseMove));
 }
 
-glm::vec3 RenderLayer::getArcballVector(double x, double y)
-{
-	float width = (float)Application::get().window()->width();
-	float height = (float)Application::get().window()->height();
-
-
-	glm::vec3 p = glm::vec3(x / width * 2.f - 1.f, y / height * 2.f- 1.f, 0.f);
-	p.y = -p.y;
-
-	float opSquared = (float)p.x * (float)p.x + (float)p.y * (float)p.y;
-
-	if (opSquared <= 1.f)
-	{
-		p.z = glm::sqrt(1.f - opSquared);
-	}
-	else
-	{
-		p = glm::normalize(p);
-	}
-
-	return p;
-}
 
 bool RenderLayer::onMousePress(MousePressEvent& event)
 {
-	_trackBall->mouseDown({(float)event.cursorPos().x(), (float)event.cursorPos().y()});
-
-	_rotateMode = true;
-
-	PointD pos = event.cursorPos();
-
+	int trackMode = RenderGlobal::get()._trackMode;
+	//if (trackMode == 0 || trackMode == 2)
+	//{
+		RenderGlobal::get()._mouseDown = true;
+	    _trackBall->mouseDown({(float)event.cursorPos().x(), (float)event.cursorPos().y()});
+	    PointD pos = event.cursorPos();
+	//}
 
 	return true;
 }
 
 bool RenderLayer::onMouseRelease(MouseReleaseEvent& event)
 {
-	_rotateMode = false;
+	int trackMode = RenderGlobal::get()._trackMode;
+	//if (trackMode == 0)
+	//{
+		RenderGlobal::get()._mouseDown = false;
+	//}
+
 	return true;
 }
 
 bool RenderLayer::onMouseMove(MouseMoveEvent& event)
 {
+	int trackMode = RenderGlobal::get()._trackMode;
+	bool mouseDown = RenderGlobal::get()._mouseDown;
 
-	if (_rotateMode)
+	if (mouseDown && trackMode != 3)
 	{
-		_trackBall->mouseMove({ (float)event.cursorPos().x(), (float)event.cursorPos().y() });
+		_trackBall->mouseMove({ (float)event.cursorPos().x(), (float)event.cursorPos().y() }, trackMode);
 	}
 
 	return true;
@@ -188,10 +148,9 @@ bool RenderLayer::onMouseMove(MouseMoveEvent& event)
 
 bool RenderLayer::onMouseScroll(MouseScrollEvent& event)
 {
-
-
 	double yOffset = event.yOffset();
 	_trackBall->mouseScroll(this, yOffset);
+
 
 	return true;
 }

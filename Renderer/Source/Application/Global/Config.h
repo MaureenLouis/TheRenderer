@@ -17,10 +17,13 @@ public:
 	int defaultVideoMode();
 	void setDefaultVideoMode(int viewModeIndex);
 
+	float _mouseSensitivity = 1.f;
+
 private:
 	Config();
 	~Config();
 	
+
 	int _currentVideoMode;
 	std::vector<GLFWvidmode> _videoModes;
 

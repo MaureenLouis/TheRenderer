@@ -32,7 +32,10 @@
 #include "Fundation/Type/Point.h"
 #include "Fundation/Type/Rect.h"
 #include "Fundation/Type/Point.h"
+#include "Fundation/Type/Plane3.h"
 #include "Fundation/Type/Line.h"
+#include "Application/Global/RenderGlobal.h"
+#include "Application/Global/Config.h"
 
 // GLM
 #include "glm/glm.hpp"
@@ -43,6 +46,11 @@
 
 // std
 #include <cassert>
+#include <stdio.h>
+
 
 // stbimage
 #include "stbimage.h"
+
+// Windows 
+#include <Windows.h>

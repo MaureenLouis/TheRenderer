@@ -28,6 +28,7 @@ public:
 	Line3<float> viewLineFromWindow(const Point3D<float>& p);
 	Point3D<float> viewPoint();
 
+	void setDefaultVideoMode();
 
 private:
 	class WindowCallback;

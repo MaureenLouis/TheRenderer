@@ -44,8 +44,10 @@ Window::Window()
 		return;
 	}
 
-	_currentWindowWidth = _videoModes[0].width;
-	_currentWindowHeight = _videoModes[0].height;
+
+	Config::get().setVideoModes(_videoModes, _videoModeCount);
+
+	Self::setDefaultVideoMode();
 
 	_window = glfwCreateWindow(_currentWindowWidth, _currentWindowHeight, "The Render", nullptr, nullptr);
 	if (_window == nullptr)
@@ -209,5 +211,13 @@ Line3<float> Window::viewLineFromWindow(const Point3D<float>& p)
 Point3D<float> Window::viewPoint()
 {
 	return Point3D<float>();
+}
+
+void Window::setDefaultVideoMode()
+{
+	int defaultVideoMode = Config::get().defaultVideoMode();
+
+	_currentWindowWidth = _videoModes[defaultVideoMode].width;
+	_currentWindowHeight = _videoModes[defaultVideoMode].height;
 }
 
