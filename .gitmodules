@@ -17,3 +17,6 @@
 [submodule "Renderer/3rdParty/eigen"]
 	path = Renderer/3rdParty/eigen
 	url = https://gitlab.com/libeigen/eigen.git
+[submodule "Renderer/3rdParty/assimp"]
+	path = Renderer/3rdParty/assimp
+	url = https://github.com/assimp/assimp.git
