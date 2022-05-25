@@ -20,3 +20,6 @@
 [submodule "Renderer/3rdParty/assimp"]
 	path = Renderer/3rdParty/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "Renderer/3rdParty/entt"]
+	path = Renderer/3rdParty/entt
+	url = https://hub.fastgit.xyz/skypjack/entt.git
