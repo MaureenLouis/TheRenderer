@@ -33,8 +33,12 @@ RenderLayer::RenderLayer()
 void RenderLayer::onAttach()
 {
 	glEnable(GL_DEPTH_TEST);
+
+    // Enable alpha channel
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Enable edged faces
 
 	int width = Application::getPtr()->window()->width();
 	int height = Application::getPtr()->window()->height();
