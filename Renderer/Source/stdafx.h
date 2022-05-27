@@ -36,6 +36,7 @@
 #include "Fundation/Type/Line.h"
 #include "Application/Global/RenderGlobal.h"
 #include "Application/Global/Config.h"
+#include "Fundation/Assert/Assert.h"
 
 // GLM
 #include "glm/glm.hpp"

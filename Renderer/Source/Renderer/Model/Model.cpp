@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Model.h"
 #include "Vertex.h"
+#include "Renderer/Material/Material.h"
 
 Model::Model(const char* path)
 {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path,
-		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr)
 	{
@@ -15,6 +16,14 @@ Model::Model(const char* path)
 	}
 
 	Self::processNode(scene->mRootNode, scene);
+}
+
+void Model::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
+{
+	for (auto mesh : _meshes)
+	{
+		mesh->draw(m , v, p);
+	}
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene)
@@ -85,5 +94,14 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	return std::make_shared<Mesh>(std::move(vertices), std::move(indices));
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	Ref<Material> mat = std::make_shared<Material>();
+	
+	aiColor4D color4;
+	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
+	{
+		mat->setMaterialColor(Material::Type::DiffuseColor, color4);
+	}
+
+	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));
 }

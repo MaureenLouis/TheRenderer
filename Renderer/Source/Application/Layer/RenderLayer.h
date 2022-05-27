@@ -10,6 +10,7 @@
 #include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
 
+#include "Renderer/Model/Model.h"
 
 FORWARD_DECL(MousePressEvent);
 FORWARD_DECL(MouseReleaseEvent);
@@ -28,9 +29,6 @@ public:
 	virtual void onUpdate(double deltaTime) override;
 	virtual void onEvent(Event& event) override;
 
-#if 0
-	glm::vec3 getArcballVector(double x, double y);
-#endif
 
 private:
 	bool onMousePress(MousePressEvent& event);
@@ -48,8 +46,8 @@ public:
 	Unique<AxisObject> _xAxisObject;
 	Unique<AxisObject> _yAxisObject;
 	Unique<AxisObject> _zAxisObject;
-	Unique<GridObject> _gridObject;
 #endif
+	Unique<GridObject> _gridObject;
 
 	Unique<Object2D> _quad;
 	Unique<PerspectiveCamera> _camera;
@@ -59,7 +57,8 @@ public:
 
 	bool _rotateMode = false;
 
-
+	
+	Unique<Model> _model;
 
 	Unique<FpsCameraController> _controller;
 	Unique<TrackBall> _trackBall;

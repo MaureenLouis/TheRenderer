@@ -7,7 +7,7 @@ class Model
 public:
 	Model(const char* path);
 
-	void draw() {};
+	void draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p);
 
 private:
 	void processNode(aiNode* node, const aiScene* scene);

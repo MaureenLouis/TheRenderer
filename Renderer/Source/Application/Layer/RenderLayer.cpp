@@ -8,6 +8,7 @@ RenderLayer::RenderLayer()
 {
 	_quad = std::make_unique<Object2D>();
 
+#if 0
 	_xAxisObject = std::make_unique<AxisObject>(AxisObject::AxisType::xAxis);
 	_xAxisObject->setLineWidth(2.5f);
 	_xAxisObject->setScaled(0.1f);
@@ -17,6 +18,7 @@ RenderLayer::RenderLayer()
 	_zAxisObject = std::make_unique<AxisObject>(AxisObject::AxisType::zAxis);
 	_zAxisObject->setLineWidth(2.5f);
 	_zAxisObject->setScaled(0.1f);
+#endif
 
 	_gridObject = std::make_unique<GridObject>();
 
@@ -28,6 +30,9 @@ RenderLayer::RenderLayer()
 	p = _trackBall->project();
 
 	_cameraDist = 1.75f / glm::tan(glm::radians(45.f * 0.5f));
+
+
+	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");
 }
 
 void RenderLayer::onAttach()
@@ -74,12 +79,15 @@ void RenderLayer::onUpdate(double deltaTime)
 	mvp = p *  v  * m;
 
 
+
 	// 绘制图形
-	int drawId = 0;
+
 	_quad->shader()->setUniform("mvp", mvp/* * glm::rotate(glm::mat4(1.f), (float)runningTime * 50.f, glm::vec3(0.f, 1.f, 0.f))*/);
 	_quad->draw();
 
-	// pick
+
+	_model->draw(m, v, p);
+
 
 	// 绘制坐标轴
 #if 0
@@ -91,17 +99,26 @@ void RenderLayer::onUpdate(double deltaTime)
 
 	_zAxisObject->shader()->setUniform("mvp", mvp);
 	_zAxisObject->draw();
-#endif
+
+
 
 	_gridObject->shader()->setUniform("m", m);
 	_gridObject->shader()->setUniform("v", v);
 	_gridObject->shader()->setUniform("p", p);
-
 	_gridObject->draw();
+
+#endif
+
+
+
+
+
 
 #if 0
 	_trackBall->draw();
 #endif
+
+
 
 	// 刷新相机位置
 #if 0
