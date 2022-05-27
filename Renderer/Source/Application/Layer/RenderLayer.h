@@ -44,10 +44,12 @@ public:
 	glm::mat4 m;
 	glm::mat4 mvp;
 
+#if 0
 	Unique<AxisObject> _xAxisObject;
 	Unique<AxisObject> _yAxisObject;
 	Unique<AxisObject> _zAxisObject;
 	Unique<GridObject> _gridObject;
+#endif
 
 	Unique<Object2D> _quad;
 	Unique<PerspectiveCamera> _camera;

@@ -38,7 +38,6 @@ void RenderLayer::onAttach()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Enable edged faces
 
 	int width = Application::getPtr()->window()->width();
 	int height = Application::getPtr()->window()->height();

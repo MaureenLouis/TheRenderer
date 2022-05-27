@@ -18,11 +18,12 @@ IncludeDir["spdlog"] = "Renderer/3rdParty/spdlog/include"
 IncludeDir["imgui"]  = "Renderer/3rdParty/imgui"
 IncludeDir["stbimage"] = "Renderer/3rdParty/stbimage/include"
 IncludeDir["assimp"] = "Renderer/3rdParty/assimp/include"
+IncludeDir["entt"]   = "Renderer/3rdParty/entt"
 
 include "Renderer/3rdParty/GLFW"
 include "Renderer/3rdParty/GLAD"
 include "Renderer/3rdParty/imgui"
-include "renderer/3rdParty/assimp"
+include "Renderer/3rdParty/assimp"
 
 project "Renderer"
     location "Renderer"
@@ -47,7 +48,8 @@ project "Renderer"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.stbimage}",
-		"%{IncludeDir.assimp}"
+		"%{IncludeDir.assimp}",
+		"%{IncludeDir.entt}"
 	}
 	
 	pchheader "stdafx.h"
@@ -55,15 +57,7 @@ project "Renderer"
 	
 	ignoredefaultlibraries { "LIBCMTD" }
 	
-	links
-	{
-	    "GLFW",
-		"GLAD",
-	    "opengl32.lib",
-		"imgui",
-		"Pathcch.lib",
-		"assimp"
-	}
+
 
     filter "system:windows"
 	    cppdialect    "C++17"
@@ -84,13 +78,38 @@ project "Renderer"
     filter "configurations:Debug"
         defines { "DEBUG" }
         symbols "On"
+		staticruntime "on"
+		runtime "Debug"
 		
 		defines
 		{
 		    _DEBUG
 		}
+		
+	links
+	{
+		"assimp",
+	    "GLFW",
+		"GLAD",
+	    "opengl32.lib",
+		"imgui",
+		"Pathcch.lib",
+        "msvcrtd.lib"
+	}
 
     filter "configurations:Release"
         defines { "RELEASE" }
         optimize "On"
-	   
+	    staticruntime "on"
+		runtime "Release"
+		
+			links
+	{
+		"assimp",
+	    "GLFW",
+		"GLAD",
+	    "opengl32.lib",
+		"imgui",
+		"Pathcch.lib",
+        "msvcrt.lib"
+	}

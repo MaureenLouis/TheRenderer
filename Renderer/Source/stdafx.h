@@ -54,3 +54,11 @@
 
 // Windows 
 #include <Windows.h>
+
+// entt
+#include "entt.hpp"
+
+// Assimp
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
