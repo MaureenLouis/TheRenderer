@@ -6,6 +6,7 @@
 #include "Renderer/Component/AxisObject.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Component/2dObject.h"
+#include "Renderer/Component/GridObject.h"
 #include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
 
@@ -46,6 +47,7 @@ public:
 	Unique<AxisObject> _xAxisObject;
 	Unique<AxisObject> _yAxisObject;
 	Unique<AxisObject> _zAxisObject;
+	Unique<GridObject> _gridObject;
 
 	Unique<Object2D> _quad;
 	Unique<PerspectiveCamera> _camera;

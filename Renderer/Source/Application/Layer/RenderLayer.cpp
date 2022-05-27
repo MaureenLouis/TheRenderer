@@ -18,6 +18,7 @@ RenderLayer::RenderLayer()
 	_zAxisObject->setLineWidth(2.5f);
 	_zAxisObject->setScaled(0.1f);
 
+	_gridObject = std::make_unique<GridObject>();
 
 	//_camera = std::make_unique<PerspectiveCamera>(width, height, glm::vec3(2.f, 1.f, 2.f));
 
@@ -32,6 +33,8 @@ RenderLayer::RenderLayer()
 void RenderLayer::onAttach()
 {
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	int width = Application::getPtr()->window()->width();
 	int height = Application::getPtr()->window()->height();
@@ -76,6 +79,7 @@ void RenderLayer::onUpdate(double deltaTime)
 	// pick
 
 	// »æÖÆ×ø±êÖá
+#if 0
 	_xAxisObject->shader()->setUniform("mvp", mvp);
 	_xAxisObject->draw();
 
@@ -84,6 +88,13 @@ void RenderLayer::onUpdate(double deltaTime)
 
 	_zAxisObject->shader()->setUniform("mvp", mvp);
 	_zAxisObject->draw();
+#endif
+
+	_gridObject->shader()->setUniform("m", m);
+	_gridObject->shader()->setUniform("v", v);
+	_gridObject->shader()->setUniform("p", p);
+
+	_gridObject->draw();
 
 #if 0
 	_trackBall->draw();
