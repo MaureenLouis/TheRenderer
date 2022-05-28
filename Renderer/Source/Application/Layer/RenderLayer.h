@@ -10,6 +10,7 @@
 #include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
 #include "Renderer/Component/CoordObject.h"
+#include "Renderer/RenderObject/Teapot.h"
 #include "Renderer/Model/Model.h"
 
 FORWARD_DECL(MousePressEvent);
@@ -63,6 +64,7 @@ public:
 	Unique<FpsCameraController> _controller;
 	Ref<TrackBall> _trackBall;
 	Ref<CoordObject> _coordObject;
+	Ref<Teapot> _teapot;
 
 	float _cameraDist;
 };

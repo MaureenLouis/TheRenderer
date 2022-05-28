@@ -1,11 +1,21 @@
 #pragma once
+#include "Renderer/Light/LightComponent.h"
 
 class Scene
 {
-public:
+	GENERATE_SINGLETON(Scene);
+
+private:
 	Scene();
-	~Scene();
+
+public:
+
+
+	Ref<LightComponent>& defaultLight()
+	{ return _defaultLight; }
 
 private:
 	entt::registry m_registry;
+
+	Ref<LightComponent> _defaultLight;
 };

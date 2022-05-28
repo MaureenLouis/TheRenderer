@@ -44,7 +44,7 @@ in vec3 farPoint;
 in mat4 fragView;
 in mat4 fragProj;
 float near = 0.01;
-float far = 100;
+float far = 100.0;
 
 vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) {
     vec2 coord = fragPos3D.xz * scale;
@@ -83,7 +83,7 @@ void main()
     
     gl_FragDepth = computeDepth(fragPos3D);
 
-   float linearDepth = computeLinearDepth(fragPos3D);
+    float linearDepth = computeLinearDepth(fragPos3D);
     float fading = max(0, (0.5 - linearDepth));
 
     outColor = (grid(fragPos3D, 10, true) + grid(fragPos3D, 1, true))* float(t > 0); // adding multiple resolution for the grid

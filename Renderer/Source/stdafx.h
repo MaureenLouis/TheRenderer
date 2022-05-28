@@ -55,6 +55,7 @@
 
 // Windows 
 #include <Windows.h>
+#include <PathCch.h>
 
 // entt
 #include "entt.hpp"

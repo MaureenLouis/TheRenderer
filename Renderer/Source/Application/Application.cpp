@@ -182,6 +182,24 @@ void Application::registerWindow(Window* window)
 	pImpl->registerWindow(window);
 }
 
+const TCHAR* Application::applicationDir()
+{
+	long ret = 0;
+	// 获取程序根目录
+	static TCHAR exePathBuf[MAX_PATH];
+	ret = ::GetModuleFileName(NULL, exePathBuf, MAX_PATH);
+	ret = ::PathCchRemoveFileSpec(exePathBuf, MAX_PATH);
+	if (ret != 0)
+	{
+		return exePathBuf;
+	}
+	else
+	{
+		APP_ERROR("Fail to get application root directory");
+		return nullptr;
+	}
+}
+
 Application::Application()
 	: pImpl(new ApplicationPrivate(this))
 {

@@ -2,7 +2,7 @@
 #include "UiLayer.h"
 #include "Application/Application.h"
 #include "Renderer/RendererCore/Renderer.h"
-
+#include "Renderer/Scene/Scene.h"
 #include "Application/UI/ViewModeControl.h"
 
 UiLayer::UiLayer()
@@ -69,6 +69,12 @@ void UiLayer::onUpdate(double deltaTime)
 	DisplaySettings::draw();
 
 	MenuBar::draw();
+
+	// Light position
+	ImGui::Begin("Default light");
+    glm::vec3& pos = Scene::get().defaultLight()->position();
+	ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
+	ImGui::End();
 
 	// Information
 	ImGui::Begin("Information");

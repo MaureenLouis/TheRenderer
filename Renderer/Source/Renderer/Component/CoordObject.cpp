@@ -7,6 +7,9 @@ CoordObject::CoordObject(Ref<TrackBall>& trackBall)
 	_trackBall = trackBall;
 	_cameraScaleRatio = 10;
 
+	const TCHAR* appRootDir = Application::get().applicationDir();
+
+
 	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");
 
 	_m = _trackBall->model();
@@ -40,7 +43,7 @@ void CoordObject::draw()
 
 	glViewport(x, y, w / 8, h / 8);
 
-	_model->draw(_m, _v * _trackBall->track().matrixRT(), _p);
+	_model->draw(_m, _v * _trackBall->track().matrixR(), _p);
 
 	glViewport(x, y, w, h);
 }

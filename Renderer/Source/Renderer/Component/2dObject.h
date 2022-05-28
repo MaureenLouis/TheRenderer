@@ -4,12 +4,12 @@
 #include "Renderer/Texture/Texture.h"
 #include "Fundation/Ref/Unique.h"
 #include "Fundation/Ref/Ref.h"
-
+#include "Renderer/Camera/TrackBall.h"
 
 class Object2D : public RenderObject
 {
 public:
-	Object2D();
+	Object2D(Ref<TrackBall>& trackBall);
 
 	virtual void draw() override;
 	virtual Unique<ShaderProgram>& shader() override
@@ -23,4 +23,6 @@ private:
 	Ref<IndexBuffer>      _indexBuffer;
 	Unique<ShaderProgram> _program;
 	Unique<Texture2D>     _texture;
+
+	Ref<TrackBall>        _trackBall;
 };

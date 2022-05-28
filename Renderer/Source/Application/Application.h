@@ -45,6 +45,8 @@ public:
 	void addLayer(Layer* layer);
 	void registerWindow(Window* window);
 
+	static const TCHAR* applicationDir();
+
 private:
 	Application();
 

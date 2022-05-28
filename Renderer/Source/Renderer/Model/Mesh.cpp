@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Mesh.h"
 #include "Renderer/Material/Material.h"
+#include "Renderer/Scene/Scene.h"
 
 const char* Mesh::_vertexShaderSource =R"(
 #version 330 core
@@ -14,20 +15,66 @@ uniform mat4 m;
 uniform mat4 v;
 uniform mat4 p;
 
+out vec3 normal;
+out vec3 fragPos;
+
 void main()
 {    
     gl_Position = p * v * m * vec4(aPos, 1.0);
+    normal = aNormal;
+    fragPos = vec3(m * vec4(aPos, 0.0));
 }
 )";
 
 const char* Mesh::_fragmentShaderSource = R"(
 #version 330 core
 layout(location=0) out vec4 outColor;
+
+in vec3 normal;
+in vec3 fragPos;
+
 uniform vec4 diffuseColor;
 uniform vec3 lightColor;
+uniform vec3 lightPos;
+
+vec3 calculateAmbient()
+{
+    float ambientStrength = 1.f;
+    vec3 ambient = ambientStrength * diffuseColor.xyz;
+
+    vec3 result = ambient * diffuseColor.xyz;
+    return result;
+}
+
+vec3 calculateDiffuse()
+{
+    // Global normal
+    vec3 norm = normalize(normal);
+    
+    // Light direction
+    vec3 lightDir = normalize(fragPos - lightPos);
+    
+    // Diffuse quantity
+    float diff = max(dot(lightDir, norm), 0.0);
+
+    // Diffuse color
+    vec3 diffuse = diff * lightColor;
+
+    return diffuse;
+}
+
 void main()
 {
-    outColor = diffuseColor;
+    // Diffuse
+    vec3 diffuse = calculateDiffuse();
+
+    // Ambient
+    vec3 ambient = calculateAmbient();
+
+    // Result
+    vec3 result = (diffuse + ambient) * diffuseColor.xyz;
+ 
+    outColor = vec4(result, 1.0);
 }
 )";
 
@@ -68,6 +115,11 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 	_program->setUniform("v", v);
 	_program->setUniform("p", p);
 	_program->setUniform("diffuseColor", diffuseColor);
+
+	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
+
+	_program->setUniform("lightColor",defaultLight->color());
+	_program->setUniform("lightPos", defaultLight->position());
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

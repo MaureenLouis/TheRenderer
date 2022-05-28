@@ -119,6 +119,20 @@ Transform::Transform()
 	int width = Application::getPtr()->window()->width();
 	int height = Application::getPtr()->window()->height();
 	_project = glm::perspective(45.f, (float)width / (float)height, 0.1f, 100.f);
+
+	_cameraDist = 1.75f / glm::tan(glm::radians(45.f * 0.5f));
+
+}
+
+glm::mat4 Transform::viewMatrix()
+{
+	glm::mat4 lookAt = glm::lookAt(
+		glm::vec3(_cameraDist, _cameraDist, _cameraDist),
+		glm::vec3(0.f, 0.f, 0.f),
+		glm::vec3(0.f, 1.f, 0.f)
+	);
+
+	return lookAt * _track.matrixSRT();
 }
 
 void Similarity::setIdentity()
@@ -140,9 +154,8 @@ glm::mat4 Similarity::matrixSRT()
 	return scale * rotate * translate;
 }
 
-glm::mat4 Similarity::matrixRT()
+glm::mat4 Similarity::matrixR()
 {
 	glm::mat4 rotate = glm::toMat4(_rot);
-	glm::mat4 translate = glm::translate(glm::mat4(1.f), _tra);
-	return rotate * translate;
+	return rotate;
 }

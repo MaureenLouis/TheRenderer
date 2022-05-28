@@ -6,32 +6,13 @@
 
 RenderLayer::RenderLayer()
 {
-	_quad = std::make_unique<Object2D>();
-
-#if 0
-	_xAxisObject = std::make_unique<AxisObject>(AxisObject::AxisType::xAxis);
-	_xAxisObject->setLineWidth(2.5f);
-	_xAxisObject->setScaled(0.1f);
-	_yAxisObject = std::make_unique<AxisObject>(AxisObject::AxisType::yAxis);
-	_yAxisObject->setLineWidth(2.5f);
-	_yAxisObject->setScaled(0.1f);
-	_zAxisObject = std::make_unique<AxisObject>(AxisObject::AxisType::zAxis);
-	_zAxisObject->setLineWidth(2.5f);
-	_zAxisObject->setScaled(0.1f);
-#endif
-
 	_gridObject = std::make_unique<GridObject>();
-
-	//_camera = std::make_unique<PerspectiveCamera>(width, height, glm::vec3(2.f, 1.f, 2.f));
-
 	_trackBall = std::make_shared<TrackBall>();
-	m = _trackBall->model();
-	p = _trackBall->project();
 
-	_cameraDist = _trackBall->cameraDist();
-
+	_quad = std::make_unique<Object2D>(_trackBall);
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
-	//_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");
+
+	_teapot = std::make_shared<Teapot>(_trackBall);
 }
 
 void RenderLayer::onAttach()
@@ -59,60 +40,26 @@ void RenderLayer::onUpdate(double deltaTime)
 	static double runningTime = 0.0;
 	// static glm::vec3 pos = _camera->position();
 
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	int width = Application::getPtr()->window()->width();
-	int height = Application::getPtr()->window()->height();
+	// »æÖÆ²èºø
 
-	v = glm::lookAt(
-		glm::vec3(_cameraDist,  _cameraDist, _cameraDist),
-		glm::vec3(0.f, 0.f, 0.f), 
-		glm::vec3(0.f, 1.f, 0.f));
+
+
+
 #if 0
-	glViewport(0, 0, 150, 150);
-	_model->draw(m, v, p);
-	glViewport(0, 0, width, height);
-#endif
-
-	v = v * _trackBall->track().matrixSRT();
-	mvp = p *  v  * m;
-
-	// »æÖÆÍ¼ÐÎ
-	_quad->shader()->setUniform("mvp", mvp/* * glm::rotate(glm::mat4(1.f), (float)runningTime * 50.f, glm::vec3(0.f, 1.f, 0.f))*/);
-	_quad->draw();
-
-
-
-
-	// »æÖÆ×ø±êÖá
-#if 0
-	_xAxisObject->shader()->setUniform("mvp", mvp);
-	_xAxisObject->draw();
-
-	_yAxisObject->shader()->setUniform("mvp", mvp);
-	_yAxisObject->draw();
-
-	_zAxisObject->shader()->setUniform("mvp", mvp);
-	_zAxisObject->draw();
-
-
-
 	_gridObject->shader()->setUniform("m", m);
 	_gridObject->shader()->setUniform("v", v);
 	_gridObject->shader()->setUniform("p", p);
 	_gridObject->draw();
-
 #endif
 
-
-
-
-
-
-#if 0
-	_trackBall->draw();
+#if 1
+	// _quad->draw();
+	_teapot->draw();
 #endif
+
 	_coordObject->draw();
 
 }

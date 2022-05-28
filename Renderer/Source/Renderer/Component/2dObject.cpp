@@ -39,7 +39,8 @@ int indices[] = {
 	1, 2, 3
 };
 
-Object2D::Object2D()
+Object2D::Object2D(Ref<TrackBall>& trackBall)
+	: _trackBall(trackBall)
 {
 	BufferLayout layout = 
 	{ 
@@ -70,8 +71,13 @@ void Object2D::draw()
 	glActiveTexture(GL_TEXTURE0);
 	_texture->bind();
 
+	glm::mat4& m = _trackBall->model();
+	glm::mat4& p = _trackBall->project();
+	glm::mat4& v = _trackBall->viewMatrix();
+
 	_program->use();
 	_program->setUniform("albedo", 0);
+	_program->setUniform("mvp", p * v * m);
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);
