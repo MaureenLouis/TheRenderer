@@ -24,15 +24,14 @@ RenderLayer::RenderLayer()
 
 	//_camera = std::make_unique<PerspectiveCamera>(width, height, glm::vec3(2.f, 1.f, 2.f));
 
-	_trackBall = std::make_unique<TrackBall>();
+	_trackBall = std::make_shared<TrackBall>();
 	m = _trackBall->model();
-
 	p = _trackBall->project();
 
-	_cameraDist = 1.75f / glm::tan(glm::radians(45.f * 0.5f));
+	_cameraDist = _trackBall->cameraDist();
 
-
-	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");
+	_coordObject = std::make_shared<CoordObject>(_trackBall);
+	//_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");
 }
 
 void RenderLayer::onAttach()
@@ -42,7 +41,6 @@ void RenderLayer::onAttach()
     // Enable alpha channel
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 	int width = Application::getPtr()->window()->width();
 	int height = Application::getPtr()->window()->height();
@@ -64,29 +62,27 @@ void RenderLayer::onUpdate(double deltaTime)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// v = _controller->getViewMatrix();
-
-	// v = _trackBall->track().matrix();
-
+	int width = Application::getPtr()->window()->width();
+	int height = Application::getPtr()->window()->height();
 
 	v = glm::lookAt(
 		glm::vec3(_cameraDist,  _cameraDist, _cameraDist),
 		glm::vec3(0.f, 0.f, 0.f), 
 		glm::vec3(0.f, 1.f, 0.f));
+#if 0
+	glViewport(0, 0, 150, 150);
+	_model->draw(m, v, p);
+	glViewport(0, 0, width, height);
+#endif
 
-	v = v * _trackBall->track().matrix();
-
+	v = v * _trackBall->track().matrixSRT();
 	mvp = p *  v  * m;
 
-
-
 	// 绘制图形
-
 	_quad->shader()->setUniform("mvp", mvp/* * glm::rotate(glm::mat4(1.f), (float)runningTime * 50.f, glm::vec3(0.f, 1.f, 0.f))*/);
 	_quad->draw();
 
 
-	_model->draw(m, v, p);
 
 
 	// 绘制坐标轴
@@ -117,16 +113,8 @@ void RenderLayer::onUpdate(double deltaTime)
 #if 0
 	_trackBall->draw();
 #endif
+	_coordObject->draw();
 
-
-
-	// 刷新相机位置
-#if 0
-	float deltaHeight = std::sin(runningTime + deltaTime) - std::sin(runningTime);
-	pos += glm::vec3(0.f, deltaHeight* 5.f, 0.f);
-	runningTime += deltaTime;
-	_camera->setPosition(pos);
-#endif
 }
 
 void RenderLayer::onEvent(Event& event)

@@ -13,7 +13,8 @@ public:
 
 public:
 	void setIdentity();
-	glm::mat4 matrix();
+	glm::mat4 matrixSRT();
+	glm::mat4 matrixRT();
 };
 
 class Transform
@@ -84,6 +85,12 @@ public:
 	Similarity& lastTrack()
 	{
 		return _lastTrack;
+	}
+
+	float cameraDist()
+	{
+		float dist = 1.75f / glm::tan(glm::radians(45.f * 0.5f));
+		return  dist;
 	}
 
 	Plane3<float> getViewPlane();

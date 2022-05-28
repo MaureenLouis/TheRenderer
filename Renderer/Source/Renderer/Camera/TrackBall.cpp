@@ -130,7 +130,7 @@ void Similarity::setIdentity()
 	_scale = 1.f;
 }
 
-glm::mat4 Similarity::matrix()
+glm::mat4 Similarity::matrixSRT()
 {
 	// Translate * scale * rot;
 	glm::mat4 rotate = glm::toMat4(_rot);
@@ -138,4 +138,11 @@ glm::mat4 Similarity::matrix()
 	glm::mat4 translate = glm::translate(glm::mat4(1.f), _tra);
 
 	return scale * rotate * translate;
+}
+
+glm::mat4 Similarity::matrixRT()
+{
+	glm::mat4 rotate = glm::toMat4(_rot);
+	glm::mat4 translate = glm::translate(glm::mat4(1.f), _tra);
+	return rotate * translate;
 }

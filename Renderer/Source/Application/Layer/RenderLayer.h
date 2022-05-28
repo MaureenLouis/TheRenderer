@@ -9,7 +9,7 @@
 #include "Renderer/Component/GridObject.h"
 #include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
-
+#include "Renderer/Component/CoordObject.h"
 #include "Renderer/Model/Model.h"
 
 FORWARD_DECL(MousePressEvent);
@@ -61,8 +61,8 @@ public:
 	Unique<Model> _model;
 
 	Unique<FpsCameraController> _controller;
-	Unique<TrackBall> _trackBall;
-
+	Ref<TrackBall> _trackBall;
+	Ref<CoordObject> _coordObject;
 
 	float _cameraDist;
 };

@@ -78,6 +78,11 @@ void ShaderProgram::setUniform(const int location, const glm::vec4& val)
 	glUniform4f(location, val.x, val.y, val.z, val.w);
 }
 
+void ShaderProgram::setUniform(const int location, const glm::vec3& val)
+{
+	glUniform3f(location, val.x, val.y, val.z);
+}
+
 void ShaderProgram::setUniform(const int location, const glm::mat4& val)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val));

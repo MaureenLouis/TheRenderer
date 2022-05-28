@@ -24,6 +24,7 @@ const char* Mesh::_fragmentShaderSource = R"(
 #version 330 core
 layout(location=0) out vec4 outColor;
 uniform vec4 diffuseColor;
+uniform vec3 lightColor;
 void main()
 {
     outColor = diffuseColor;
@@ -61,7 +62,6 @@ Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, 
 void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 {
 	glm::vec4 diffuseColor = _material->materialColor(Material::Type::DiffuseColor);
-
 
 	_program->use();
 	_program->setUniform("m", m);

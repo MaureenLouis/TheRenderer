@@ -30,6 +30,7 @@ public:
 	}
 
 	void setUniform(const int location, const glm::vec4& val);
+	void setUniform(const int location, const glm::vec3& val);
 	void setUniform(const int location, const glm::mat4& val);
 	void setUniform(const int location, const int val);
 
