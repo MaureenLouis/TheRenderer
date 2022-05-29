@@ -34,6 +34,7 @@ glm::vec4 Material::materialColor(Material::Type type)
 		    return _specularColor;
 	    }
 		break;
+
 	default:
 		ASSERT(false, "Unknown color type");
 	}
@@ -43,13 +44,17 @@ void Material::setMaterialStrength(Material::Type type, float value)
 {
 	switch (type.value())
 	{
-	case (Type::ShinenessStrength):
-		{
-			_shinenessStrength = value;
-		}
-		break;
-
-		default:
+	case (Type::Glossiness):
+	{
+		_glossiness = value;
+	}
+	break;
+	case (Type::SpecularLevel):
+	{
+		_specularLevel = value;
+	}
+	break;
+	default:
 			ASSERT(false, "Unknown value type");
 	}
 }
@@ -58,9 +63,14 @@ float Material::materialStrength(Material::Type type)
 {
 	switch (type.value())
 	{
-	case (Type::ShinenessStrength):
+	case (Type::Glossiness):
 	{
-		return _shinenessStrength;
+		return _glossiness;
+	}
+	break;
+	case (Type::SpecularLevel):
+	{
+		return _specularLevel;
 	}
 	break;
 	default:

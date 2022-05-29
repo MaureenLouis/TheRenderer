@@ -1,14 +1,14 @@
 #include "stdafx.h"
-#include "Teapot.h"
+#include "MeshComponent.h"
 
-Teapot::Teapot(Ref<TrackBall>& trackBall)
+MeshComponent::MeshComponent(Ref<TrackBall>& trackBall)
 	: _trackBall(trackBall)
 {
 	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\teapot.obj");
 
 }
 
-void Teapot::draw()
+void MeshComponent::draw()
 {
 	glm::mat4& m = _trackBall->model();
 	glm::mat4& v = _trackBall->viewMatrix();

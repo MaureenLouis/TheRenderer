@@ -1,14 +1,12 @@
 #pragma once
 #include "Renderer/Camera/TrackBall.h"
-#include "Renderer/Model/Model.h"
+#include "Fundation/Model/Model.h"
 
-
-class Teapot 
+class MeshComponent 
 {
-	SELF(Teapot);
-
+	SELF(MeshComponent);
 public:
-	Teapot(Ref<TrackBall>& trackBall);
+	MeshComponent(Ref<TrackBall>& trackBall);
 
 	void draw();
 

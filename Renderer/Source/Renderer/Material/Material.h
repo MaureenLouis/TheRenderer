@@ -7,7 +7,7 @@ public:
 	Enumerate(Type, uint16_t, 
 		DiffuseColor = 1,
 		SpecularColor,
-		ShinenessStrength);
+		Glossiness, SpecularLevel);
 
 	void setMaterialColor(Material::Type type, const aiColor4D& color);
 	glm::vec4 materialColor(Material::Type type);
@@ -19,5 +19,6 @@ public:
 private:
 	glm::vec4 _diffuseColor;
 	glm::vec4 _specularColor;
-	float _shinenessStrength;
+	float _glossiness;
+	float _specularLevel;
 };

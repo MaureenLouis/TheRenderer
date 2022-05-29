@@ -8,10 +8,7 @@ public:
 	Model(const char* path);
 
 	void draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p);
-
-private:
-	void processNode(aiNode* node, const aiScene* scene);
-	Ref<Mesh> processMesh(aiMesh* node, const aiScene* scene);
+	void addMesh(Ref<Mesh>&& mesh);
 
 private:
 	std::vector<Ref<Mesh>> _meshes;

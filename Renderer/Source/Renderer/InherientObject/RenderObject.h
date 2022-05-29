@@ -2,10 +2,10 @@
 #include "Renderer/Shader/ShaderProgram.h"
 
 
-class RenderObject
+class InherientObject
 {
 public:
-	virtual ~RenderObject() {};
+	virtual ~InherientObject() {};
 	virtual void draw() = 0;
 	virtual Unique<ShaderProgram>& shader() = 0;
 };

@@ -1,9 +1,8 @@
 #include "stdafx.h"
-#include "Model.h"
-#include "Vertex.h"
-#include "Renderer/Material/Material.h"
+#include "ModelLoader.h"
+#include "Fundation/Model/Model.h"
 
-Model::Model(const char* path)
+ModelLoaderAssimp::ModelLoaderAssimp(const char* path)
 {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path,
@@ -18,20 +17,13 @@ Model::Model(const char* path)
 	Self::processNode(scene->mRootNode, scene);
 }
 
-void Model::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
-{
-	for (auto mesh : _meshes)
-	{
-		mesh->draw(m , v, p);
-	}
-}
-
-void Model::processNode(aiNode* node, const aiScene* scene)
+void ModelLoaderAssimp::processNode(aiNode* node, const aiScene* scene)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		Ref<Mesh> aMesh = Self::processMesh(mesh, scene);
+		// _model->addMesh(std::move(aMesh));
 		_meshes.push_back(std::move(aMesh));
 	}
 
@@ -41,7 +33,8 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
+
+Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	// Get vertices
 	std::vector<Vertex> vertices;
@@ -49,7 +42,7 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		aiVector3D* vertice = mesh->mVertices;
 		Vertex vertex;
-		
+
 		vertex._position.x = vertice[i].x;
 		vertex._position.y = vertice[i].y;
 		vertex._position.z = vertice[i].z;
@@ -64,7 +57,7 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 		if (mesh->mTextureCoords[0])
 		{
-		    vertex._texCoords.x = mesh->mTextureCoords[0][i].x;
+			vertex._texCoords.x = mesh->mTextureCoords[0][i].x;
 			vertex._texCoords.y = mesh->mTextureCoords[0][i].y;
 
 			vertex._tangent.x = mesh->mTangents[i].x;
@@ -96,7 +89,7 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	Ref<Material> mat = std::make_shared<Material>();
-	
+
 	aiColor4D color4;
 	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
 	{
@@ -105,13 +98,21 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color4))
 	{
+		APP_INFO("Specular color: {0},{1},{2}", color4.r, color4.g, color4.b);
 		mat->setMaterialColor(Material::Type::SpecularColor, color4);
 	}
 
 	float value;
 	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
 	{
-		mat->setMaterialStrength(Material::Type::ShinenessStrength, value);
+		mat->setMaterialStrength(Material::Type::Glossiness, value);
+		APP_INFO("Glossness: {0}", value);
+	}
+
+	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS_STRENGTH, &value))
+	{
+		mat->setMaterialStrength(Material::Type::SpecularLevel, value);
+		APP_INFO("Specular level: {0}", value);
 	}
 
 	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));

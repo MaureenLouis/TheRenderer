@@ -5,13 +5,34 @@
 #include "Application/Event/MouseEvent.h"
 #include "Renderer/Scene/Scene.h"
 
+static void constructCallBack()
+{
+	APP_INFO("Hi!");
+}
+
 RenderLayer::RenderLayer()
 {
 	_trackBall = Scene::get().trackBall();
 
 	_gridObject = std::make_unique<GridObject>();
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
-	_teapot = std::make_shared<Teapot>(_trackBall);
+	// _teapot = std::make_shared<MeshComponent>(_trackBall);
+    
+	 _teapotEntity = Scene::get().createEntity();
+	//Scene::get().registry().on_construct<MeshComponent>().connect<&constructCallBack>();
+	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
+
+
+#if 0
+	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
+	for (auto entity : view)
+	{
+	    MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
+
+	}
+#endif
+
+
 }
 
 void RenderLayer::onAttach()
@@ -56,7 +77,8 @@ void RenderLayer::onUpdate(double deltaTime)
 
 #if 1
 	// _quad->draw();
-	_teapot->draw();
+	MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(_teapotEntity);
+	meshComponent.draw();
 #endif
 
 	_coordObject->draw();

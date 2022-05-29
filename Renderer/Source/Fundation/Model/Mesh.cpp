@@ -38,7 +38,10 @@ uniform vec4 diffuseColor;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
-uniform float shineness;
+// Specular Highlights
+uniform float glossiness;
+uniform vec4  specularColor;
+uniform float specularLevel;
 
 vec3 calculateAmbient()
 {
@@ -51,13 +54,13 @@ vec3 calculateAmbient()
 
 vec3 calculateSpeculate()
 {    
-    float specularStrength = 0.2;
+
     vec3 viewDir = normalize(lightPos - fragPos);
     vec3 lightDir = normalize(fragPos - lightPos);
     vec3 norm = normalize(normal);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shineness);
-    return specularStrength * spec * lightColor;
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), glossiness);
+    return specularLevel * spec * lightColor * specularColor.xyz;
 }
 
 vec3 calculateDiffuse()
@@ -133,9 +136,14 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 	_program->setUniform("p", p);
 	_program->setUniform("diffuseColor", diffuseColor);
 
-    float shinenessStrength = _material->materialStrength(Material::Type::ShinenessStrength);
+    float glossiness = _material->materialStrength(Material::Type::Glossiness);
+    _program->setUniform("glossiness", glossiness);
 
-    _program->setUniform("shineness", shinenessStrength);
+    float specularLevel = _material->materialStrength(Material::Type::SpecularLevel);
+    _program->setUniform("specularLevel", specularLevel);
+
+    glm::vec4 specularColor = _material->materialColor(Material::Type::SpecularColor);
+    _program->setUniform("specularColor", specularColor);
 
 	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
 	_program->setUniform("lightColor",defaultLight->color());

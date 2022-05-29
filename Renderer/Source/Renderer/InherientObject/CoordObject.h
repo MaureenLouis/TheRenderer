@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderer/Camera/TrackBall.h"
-#include "Renderer/Model/Model.h"
+#include "Fundation/Model/Model.h"
 
 class CoordObject
 {

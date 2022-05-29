@@ -11,3 +11,8 @@ Scene::Scene()
 	_defaultLight->setColor(glm::vec3(1.f, 1.f, 1.f));
 }
 
+entt::entity Scene::createEntity()
+{
+	return m_registry.create();
+}
+

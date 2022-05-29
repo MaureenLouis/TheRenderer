@@ -11,12 +11,17 @@ private:
 
 public:
 	Ref<TrackBall>& trackBall()
-	{
-		return _trackBall;
-	}
+	{ return _trackBall; }
 
 	Ref<LightComponent>& defaultLight()
 	{ return _defaultLight; }
+
+	entt::entity createEntity();
+
+	entt::registry& registry()
+	{
+		return m_registry;
+	}
 
 private:
 	entt::registry m_registry;

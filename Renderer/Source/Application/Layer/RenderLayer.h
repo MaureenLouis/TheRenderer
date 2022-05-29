@@ -3,15 +3,16 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Renderer/Camera/PerspectiveCamera.h"
-#include "Renderer/Component/AxisObject.h"
+#include "Renderer/InherientObject/AxisObject.h"
 #include "Renderer/Buffer/VertexArray.h"
-#include "Renderer/Component/2dObject.h"
-#include "Renderer/Component/GridObject.h"
+#include "Renderer/InherientObject/2dObject.h"
+#include "Renderer/InherientObject/GridObject.h"
 #include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
-#include "Renderer/Component/CoordObject.h"
-#include "Renderer/RenderObject/Teapot.h"
-#include "Renderer/Model/Model.h"
+#include "Renderer/InherientObject/CoordObject.h"
+#include "Renderer/InherientObject/RenderObject.h"
+#include "Renderer/Components/MeshComponent.h"
+#include "Fundation/Model/Model.h"
 
 FORWARD_DECL(MousePressEvent);
 FORWARD_DECL(MouseReleaseEvent);
@@ -64,7 +65,9 @@ public:
 	Unique<FpsCameraController> _controller;
 	Ref<TrackBall> _trackBall;
 	Ref<CoordObject> _coordObject;
-	Ref<Teapot> _teapot;
+	// Ref<MeshComponent> _teapot;
+	entt::entity _teapotEntity;
+
 
 	float _cameraDist;
 };

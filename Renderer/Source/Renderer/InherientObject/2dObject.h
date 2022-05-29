@@ -6,7 +6,7 @@
 #include "Fundation/Ref/Ref.h"
 #include "Renderer/Camera/TrackBall.h"
 
-class Object2D : public RenderObject
+class Object2D : public InherientObject
 {
 public:
 	Object2D(Ref<TrackBall>& trackBall);

@@ -3,7 +3,7 @@
 #include "Fundation/Type/Enumerate.h"
 #include "Renderer/Shader/ShaderProgram.h"
 
-class AxisObject : public RenderObject
+class AxisObject : public InherientObject
 {
 public:
 	Enumerate(AxisType, uint8_t, 

@@ -3,7 +3,7 @@
 #include "Renderer/Buffer/Buffer.h"
 #include "Renderer/Buffer/VertexArray.h"
 
-class GridObject : public RenderObject
+class GridObject : public InherientObject
 {
 public:
 	GridObject();

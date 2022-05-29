@@ -76,6 +76,12 @@ void UiLayer::onUpdate(double deltaTime)
 	ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
 	ImGui::End();
 
+	// Material
+	// Diffuse Color
+
+
+	
+
 	// Information
 	ImGui::Begin("Information");
 	ImGui::Text("Vendor: %s\nRenderer: %s\nVersion: %s\nFps: %f",

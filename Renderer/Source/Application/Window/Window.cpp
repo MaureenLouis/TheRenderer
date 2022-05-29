@@ -5,13 +5,7 @@
 #include "Application/Event/ApplicationEvent.h"
 #include "Application/Event/MouseEvent.h"
 
-namespace Diff
-{
-	namespace SD
-	{
-		class A {};
-	}
-}
+
 
 
 class Window::WindowCallback
