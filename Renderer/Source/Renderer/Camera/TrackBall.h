@@ -54,6 +54,8 @@ public:
 	{ return  _cameraDist; }
 
 	glm::mat4 viewMatrix();
+
+
 };
 
 class TrackBall : public Transform
@@ -86,6 +88,13 @@ public:
 	Similarity& lastTrack()
 	{
 		return _lastTrack;
+	}
+
+	glm::vec3 cameraPosition()
+	{
+		glm::mat4 view = glm::inverse(viewMatrix());
+		glm::vec3 position(view[3][0], view[3][1], view[3][2]);
+		return position;
 	}
 
 private:

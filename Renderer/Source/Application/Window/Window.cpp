@@ -5,6 +5,15 @@
 #include "Application/Event/ApplicationEvent.h"
 #include "Application/Event/MouseEvent.h"
 
+namespace Diff
+{
+	namespace SD
+	{
+		class A {};
+	}
+}
+
+
 class Window::WindowCallback
 {
 public:
@@ -65,6 +74,8 @@ Window::Window()
 	_context = new OpenGLContext(_window);
 	_context->init();
 
+
+	setAntiAliasing(16);
 }
 
 Window::~Window()
@@ -74,7 +85,7 @@ Window::~Window()
 
 void Window::setAntiAliasing(int level)
 {
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_SAMPLES, level);
 }
 
 void Window::setFullScreen(bool enable)

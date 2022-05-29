@@ -3,15 +3,14 @@
 #include "Application/Application.h"
 #include "Application/Window/Window.h"
 #include "Application/Event/MouseEvent.h"
+#include "Renderer/Scene/Scene.h"
 
 RenderLayer::RenderLayer()
 {
+	_trackBall = Scene::get().trackBall();
+
 	_gridObject = std::make_unique<GridObject>();
-	_trackBall = std::make_shared<TrackBall>();
-
-	_quad = std::make_unique<Object2D>(_trackBall);
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
-
 	_teapot = std::make_shared<Teapot>(_trackBall);
 }
 

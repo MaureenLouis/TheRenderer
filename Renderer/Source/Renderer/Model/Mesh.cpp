@@ -21,7 +21,8 @@ out vec3 fragPos;
 void main()
 {    
     gl_Position = p * v * m * vec4(aPos, 1.0);
-    normal = aNormal;
+    // Normal matrix
+    normal = mat3(transpose(inverse(m))) * aNormal;
     fragPos = vec3(m * vec4(aPos, 0.0));
 }
 )";
@@ -36,6 +37,8 @@ in vec3 fragPos;
 uniform vec4 diffuseColor;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
+uniform vec3 viewPos;
+uniform float shineness;
 
 vec3 calculateAmbient()
 {
@@ -44,6 +47,17 @@ vec3 calculateAmbient()
 
     vec3 result = ambient * diffuseColor.xyz;
     return result;
+}
+
+vec3 calculateSpeculate()
+{    
+    float specularStrength = 0.2;
+    vec3 viewDir = normalize(lightPos - fragPos);
+    vec3 lightDir = normalize(fragPos - lightPos);
+    vec3 norm = normalize(normal);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shineness);
+    return specularStrength * spec * lightColor;
 }
 
 vec3 calculateDiffuse()
@@ -71,8 +85,11 @@ void main()
     // Ambient
     vec3 ambient = calculateAmbient();
 
+    // Specular color
+    vec3 specular = calculateSpeculate();
+
     // Result
-    vec3 result = (diffuse + ambient) * diffuseColor.xyz;
+    vec3 result = (diffuse + ambient + specular) * diffuseColor.xyz;
  
     outColor = vec4(result, 1.0);
 }
@@ -116,10 +133,16 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 	_program->setUniform("p", p);
 	_program->setUniform("diffuseColor", diffuseColor);
 
-	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
+    float shinenessStrength = _material->materialStrength(Material::Type::ShinenessStrength);
 
+    _program->setUniform("shineness", shinenessStrength);
+
+	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
 	_program->setUniform("lightColor",defaultLight->color());
 	_program->setUniform("lightPos", defaultLight->position());
+
+	Ref<TrackBall> trackBall = Scene::get().trackBall();
+	_program->setUniform("viewPos", trackBall->cameraPosition());
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

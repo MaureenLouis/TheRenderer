@@ -103,5 +103,16 @@ Ref<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		mat->setMaterialColor(Material::Type::DiffuseColor, color4);
 	}
 
+	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color4))
+	{
+		mat->setMaterialColor(Material::Type::SpecularColor, color4);
+	}
+
+	float value;
+	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
+	{
+		mat->setMaterialStrength(Material::Type::ShinenessStrength, value);
+	}
+
 	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));
 }

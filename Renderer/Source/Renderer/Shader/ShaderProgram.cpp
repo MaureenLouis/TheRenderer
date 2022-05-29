@@ -92,3 +92,8 @@ void ShaderProgram::setUniform(const int location, const int val)
 {
 	glUniform1i(location, val);
 }
+
+void ShaderProgram::setUniform(const int location, const float val)
+{
+	glUniform1f(location, val);
+}
