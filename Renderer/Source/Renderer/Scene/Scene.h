@@ -1,6 +1,7 @@
 #pragma once
 #include "Renderer/Light/LightComponent.h"
 #include "Renderer/Camera/TrackBall.h"
+#include "Renderer/Components/MeshComponent.h"
 
 class Scene
 {
@@ -16,13 +17,18 @@ public:
 	Ref<LightComponent>& defaultLight()
 	{ return _defaultLight; }
 
+	entt::registry& registry()
+	{ return m_registry; }
+
 	entt::entity createEntity();
 
-	entt::registry& registry()
+	template <typename Component>
+	Component& getComponent(const entt::entity& handle)
 	{
-		return m_registry;
+		Component& component = m_registry.get<Component>(handle);
+		return component;
 	}
-
+	
 private:
 	entt::registry m_registry;
 

@@ -4,6 +4,7 @@
 #include "Application/Window/Window.h"
 #include "Application/Event/MouseEvent.h"
 #include "Renderer/Scene/Scene.h"
+#include "Application/Global/RenderGlobal.h"
 
 static void constructCallBack()
 {
@@ -18,20 +19,12 @@ RenderLayer::RenderLayer()
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
 	// _teapot = std::make_shared<MeshComponent>(_trackBall);
     
+	// Scene::get().registerEntity<MeshComponent>(_teapotEntity);
+
 	 _teapotEntity = Scene::get().createEntity();
+	 RenderGlobal::get()._currentEntity = _teapotEntity;
 	//Scene::get().registry().on_construct<MeshComponent>().connect<&constructCallBack>();
 	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
-
-
-#if 0
-	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
-	for (auto entity : view)
-	{
-	    MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
-
-	}
-#endif
-
 
 }
 
@@ -63,11 +56,6 @@ void RenderLayer::onUpdate(double deltaTime)
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// »æÖÆ²èºø
-
-
-
-
 #if 0
 	_gridObject->shader()->setUniform("m", m);
 	_gridObject->shader()->setUniform("v", v);
@@ -75,11 +63,19 @@ void RenderLayer::onUpdate(double deltaTime)
 	_gridObject->draw();
 #endif
 
-#if 1
+
 	// _quad->draw();
+#if 0
 	MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(_teapotEntity);
 	meshComponent.draw();
 #endif
+
+	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
+	for (auto entity : view)
+	{
+		MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
+		meshComponent.draw();
+	}
 
 	_coordObject->draw();
 

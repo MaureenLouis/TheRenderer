@@ -23,7 +23,6 @@ void ModelLoaderAssimp::processNode(aiNode* node, const aiScene* scene)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		Ref<Mesh> aMesh = Self::processMesh(mesh, scene);
-		// _model->addMesh(std::move(aMesh));
 		_meshes.push_back(std::move(aMesh));
 	}
 

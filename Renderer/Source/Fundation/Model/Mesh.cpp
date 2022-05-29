@@ -13,7 +13,7 @@ layout(location=4) in vec3 aBiTangent;
 
 uniform mat4 m;
 uniform mat4 v;
-uniform mat4 p;
+uniform mat4 p; 
 
 out vec3 normal;
 out vec3 fragPos;
@@ -123,7 +123,7 @@ Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, 
 	_indexBuffer = std::make_shared<IndexBuffer>((int*)&_indices[0],  _indices.size());
 	_vertexArray->setIndexBuffer(_indexBuffer);
 
-	_program = std::make_unique<ShaderProgram>(_vertexShaderSource, _fragmentShaderSource);
+	_program = std::make_unique<ShaderProgram>("D:\\Projects\\TheRenderer\\Asset\\Shader\\InherentShader\\Blinn-Phone.glsl");
 }
 
 void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
@@ -136,14 +136,17 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 	_program->setUniform("p", p);
 	_program->setUniform("diffuseColor", diffuseColor);
 
-    float glossiness = _material->materialStrength(Material::Type::Glossiness);
+    float glossiness = _material->_glossiness;
     _program->setUniform("glossiness", glossiness);
+    APP_INFO("Glossiness: {0}", glossiness);
 
-    float specularLevel = _material->materialStrength(Material::Type::SpecularLevel);
+    float specularLevel = _material->_specularLevel;
     _program->setUniform("specularLevel", specularLevel);
+	APP_INFO("SpecularLevel: {0}", specularLevel);
 
-    glm::vec4 specularColor = _material->materialColor(Material::Type::SpecularColor);
+    glm::vec4 specularColor = _material->_specularColor;
     _program->setUniform("specularColor", specularColor);
+    APP_INFO("Specular color: {0}, {1}, {2}", specularColor.x, specularColor.y, specularColor.z);
 
 	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
 	_program->setUniform("lightColor",defaultLight->color());

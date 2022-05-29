@@ -16,7 +16,6 @@ public:
 	void setMaterialStrength(Material::Type type, float value);
 	float materialStrength(Material::Type type);
 
-private:
 	glm::vec4 _diffuseColor;
 	glm::vec4 _specularColor;
 	float _glossiness;

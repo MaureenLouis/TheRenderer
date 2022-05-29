@@ -77,10 +77,18 @@ void UiLayer::onUpdate(double deltaTime)
 	ImGui::End();
 
 	// Material
-	// Diffuse Color
-
-
 	
+	auto currentEntity = RenderGlobal::get()._currentEntity;
+	auto materials = Scene::get().getComponent<MeshComponent>(currentEntity).materials();
+	Ref<Material> material = materials[0];
+
+	float f32_one = 0.1f;
+	ImGui::Begin("Material editor");
+	ImGui::ColorEdit3("Diffuse Color", glm::value_ptr(material->_diffuseColor));
+	ImGui::ColorEdit3("Specular Color", glm::value_ptr(material->_specularColor));
+	ImGui::InputScalar("Glossness", ImGuiDataType_Float, &(material->_glossiness), &f32_one);
+	ImGui::InputScalar("Specular Level", ImGuiDataType_Float, &(material->_specularLevel), &f32_one);
+	ImGui::End();
 
 	// Information
 	ImGui::Begin("Information");

@@ -9,6 +9,7 @@ public:
 	MeshComponent(Ref<TrackBall>& trackBall);
 
 	void draw();
+	std::vector<Ref<Material>> materials();
 
 private:
 	Unique<Model>  _model;

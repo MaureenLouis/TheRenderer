@@ -10,7 +10,7 @@ public:
 	void draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p);
 	void addMesh(Ref<Mesh>&& mesh);
 
-private:
+
 	std::vector<Ref<Mesh>> _meshes;
 };
 

@@ -16,3 +16,17 @@ void MeshComponent::draw()
 
 	_model->draw(m * glm::scale(glm::mat4(1.f), glm::vec3(0.2f, 0.2f, 0.2f)), v, p);
 }
+
+std::vector<Ref<Material>> MeshComponent::materials()
+{
+	std::vector<Ref<Material>> ret;
+
+	for (auto mesh : _model->_meshes)
+	{
+		Ref<Material> material = mesh->_material;
+		ret.push_back(material);
+	}
+
+	return ret;
+}
+
