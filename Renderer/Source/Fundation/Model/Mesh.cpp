@@ -128,7 +128,7 @@ Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, 
 
 void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 {
-	glm::vec4 diffuseColor = _material->materialColor(Material::Type::DiffuseColor);
+	glm::vec4 diffuseColor = _material->_diffuseColor;
 
 	_program->use();
 	_program->setUniform("m", m);
@@ -138,19 +138,21 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 
     float glossiness = _material->_glossiness;
     _program->setUniform("glossiness", glossiness);
-    APP_INFO("Glossiness: {0}", glossiness);
 
     float specularLevel = _material->_specularLevel;
     _program->setUniform("specularLevel", specularLevel);
-	APP_INFO("SpecularLevel: {0}", specularLevel);
 
     glm::vec4 specularColor = _material->_specularColor;
     _program->setUniform("specularColor", specularColor);
-    APP_INFO("Specular color: {0}, {1}, {2}", specularColor.x, specularColor.y, specularColor.z);
+
+    glm::vec4 ambientColor = _material->_ambientColor;
+    _program->setUniform("ambientColor", ambientColor);
+
 
 	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
 	_program->setUniform("lightColor",defaultLight->color());
 	_program->setUniform("lightPos", defaultLight->position());
+    _program->setUniform("lightPower", defaultLight->lightPower());
 
 	Ref<TrackBall> trackBall = Scene::get().trackBall();
 	_program->setUniform("viewPos", trackBall->cameraPosition());

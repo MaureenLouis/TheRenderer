@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ModelLoader.h"
 #include "Fundation/Model/Model.h"
+#include "ModelLoaderUtils.h"
 
 ModelLoaderAssimp::ModelLoaderAssimp(const char* path)
 {
@@ -92,26 +93,28 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 	aiColor4D color4;
 	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
 	{
-		mat->setMaterialColor(Material::Type::DiffuseColor, color4);
+		mat->_diffuseColor = ASS_TO_GLM(color4);
+	}
+
+	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color4))
+	{
+		mat->_ambientColor = ASS_TO_GLM(color4);
 	}
 
 	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color4))
 	{
-		APP_INFO("Specular color: {0},{1},{2}", color4.r, color4.g, color4.b);
-		mat->setMaterialColor(Material::Type::SpecularColor, color4);
+		mat->_specularColor = ASS_TO_GLM(color4);
 	}
 
 	float value;
 	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
 	{
-		mat->setMaterialStrength(Material::Type::Glossiness, value);
-		APP_INFO("Glossness: {0}", value);
+		mat->_glossiness = value;
 	}
 
 	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS_STRENGTH, &value))
 	{
-		mat->setMaterialStrength(Material::Type::SpecularLevel, value);
-		APP_INFO("Specular level: {0}", value);
+		mat->_specularLevel = value;
 	}
 
 	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));

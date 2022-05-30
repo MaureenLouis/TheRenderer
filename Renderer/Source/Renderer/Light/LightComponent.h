@@ -18,8 +18,12 @@ public:
 	const glm::vec3& color() const
 	{ return _lightColor; }
 
+	float& lightPower()
+	{ return _lightPower; }
+
 private:
 	glm::vec3 _position;
 	glm::vec3 _lightColor;
+	float     _lightPower;
 };
 

@@ -73,17 +73,19 @@ void UiLayer::onUpdate(double deltaTime)
 	// Light position
 	ImGui::Begin("Default light");
     glm::vec3& pos = Scene::get().defaultLight()->position();
+	float& lightPower = Scene::get().defaultLight()->lightPower();
 	ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
+	ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
 	ImGui::End();
 
 	// Material
-	
 	auto currentEntity = RenderGlobal::get()._currentEntity;
 	auto materials = Scene::get().getComponent<MeshComponent>(currentEntity).materials();
 	Ref<Material> material = materials[0];
 
 	float f32_one = 0.1f;
 	ImGui::Begin("Material editor");
+	ImGui::ColorEdit3("Ambient Color", glm::value_ptr(material->_ambientColor));
 	ImGui::ColorEdit3("Diffuse Color", glm::value_ptr(material->_diffuseColor));
 	ImGui::ColorEdit3("Specular Color", glm::value_ptr(material->_specularColor));
 	ImGui::InputScalar("Glossness", ImGuiDataType_Float, &(material->_glossiness), &f32_one);
