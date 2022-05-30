@@ -88,6 +88,7 @@ void UiLayer::onUpdate(double deltaTime)
 	ImGui::ColorEdit3("Ambient Color", glm::value_ptr(material->_ambientColor));
 	ImGui::ColorEdit3("Diffuse Color", glm::value_ptr(material->_diffuseColor));
 	ImGui::ColorEdit3("Specular Color", glm::value_ptr(material->_specularColor));
+	ImGui::InputScalar("Ambient Level", ImGuiDataType_Float, &(material->_ambientLevel), &f32_one);
 	ImGui::InputScalar("Glossness", ImGuiDataType_Float, &(material->_glossiness), &f32_one);
 	ImGui::InputScalar("Specular Level", ImGuiDataType_Float, &(material->_specularLevel), &f32_one);
 	ImGui::End();

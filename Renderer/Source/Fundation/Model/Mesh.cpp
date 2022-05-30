@@ -148,6 +148,8 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
     glm::vec4 ambientColor = _material->_ambientColor;
     _program->setUniform("ambientColor", ambientColor);
 
+    float ambientLevel = _material->_ambientLevel;
+    _program->setUniform("ambientLevel", ambientLevel);
 
 	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
 	_program->setUniform("lightColor",defaultLight->color());

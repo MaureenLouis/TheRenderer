@@ -35,9 +35,10 @@ uniform vec3 viewPos;
 uniform float glossiness;
 uniform vec4  specularColor;
 uniform float specularLevel;
-const float lightPower = 100.0;
+uniform float lightPower;
 const vec3 lightColor = vec3(1.0, 1.0, 1.0);
-const vec3 ambientColor = vec3(0.0, 0.0, 0.0);
+uniform vec4 ambientColor;
+uniform float ambientLevel;
 
 void main()
 {
@@ -61,8 +62,8 @@ void main()
 		specular = pow(specAngle, glossiness);
 	}
 
-	vec3 colorLinear = ambientColor + diffuseColor.xyz * lambertian * lightPower * lightColor / distance
-		+ specularColor.xyz * specular * lightColor * lightColor * lightPower / distance;
+	vec3 colorLinear = ambientLevel * ambientColor.xyz + diffuseColor.xyz * lambertian * lightPower * lightColor / distance
+		+ specularColor.xyz * specularLevel * specular * lightColor * lightColor * lightPower / distance;
 
 	gl_FragColor = vec4(colorLinear, 1.0);
 }
