@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include "Application/UI/imgui_impl_glfw.h"
 #include "Application/UI/imgui_impl_opengl3.h"
-
+#include "imgui_internal.h"
 
 // Spdlog
 #include "spdlog/spdlog.h"

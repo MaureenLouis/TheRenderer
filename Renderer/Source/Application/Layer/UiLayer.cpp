@@ -43,7 +43,8 @@ void UiLayer::onAttach()
 	_width = Application::get().window()->width();
 	_height = Application::get().window()->height();
 
-	_buf = new char[_width * _height * 3];
+
+
 }
 
 void UiLayer::onDetach()
@@ -52,12 +53,6 @@ void UiLayer::onDetach()
 	ImGui_ImplGlfw_Shutdown();
 	// Cleanup
 	ImGui::DestroyContext();
-
-	if (_buf)
-	{
-		delete _buf;
-		_buf = nullptr;
-	}
 }
 
 void UiLayer::begin()
@@ -74,13 +69,50 @@ const float menuBarHeight = 200;
 void UiLayer::onUpdate(double deltaTime)
 {
 	UNUSED(deltaTime);
+	
+	
+#if 1
+	static bool opt_fullscreen = true;
+	static bool opt_padding = false;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-	// glClear(GL_COLOR_BUFFER_BIT);
+	ImGuiWindowFlags window_flags = /*ImGuiWindowFlags_MenuBar | */ImGuiWindowFlags_NoDocking;
+	if (opt_fullscreen)
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	}
+	else
+	{
+		dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+	}
 
+	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		window_flags |= ImGuiWindowFlags_NoBackground;
 
+	bool* p_open;
+	if (!opt_padding)
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("Docking Space", p_open, window_flags);
+	if (!opt_padding)
+		ImGui::PopStyleVar();
+
+	if (opt_fullscreen)
+		ImGui::PopStyleVar(2);
+
+	ImGuiID dockspace_id = ImGui::GetID("Docking Space");
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+	ImGui::End();
+#endif
 
 	// viewport
-#if 1
 	ImGui::Begin("Scene Window");
 
 	unsigned int& fbo = RenderGlobal::get()._fbo;
@@ -95,25 +127,25 @@ void UiLayer::onUpdate(double deltaTime)
 		ImVec2(ImGui::GetCursorScreenPos().x + _width, ImGui::GetCursorScreenPos().y + _height ), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
-#endif
 
-	UNUSED(deltaTime);
+
 
 	// View mode
 	ViewmodeControl::draw();
+#if 1
 
 	DisplaySettings::draw();
 
-	MenuBar::draw();
+	//MenuBar::draw();
 
 	// Light position
 	{
-	    ImGui::Begin("Default light");
-	    glm::vec3& pos = Scene::get().defaultLight()->position();
-	    float& lightPower = Scene::get().defaultLight()->lightPower();
-	    ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
-	    ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
-	    ImGui::End();
+		ImGui::Begin("Default light");
+		glm::vec3& pos = Scene::get().defaultLight()->position();
+		float& lightPower = Scene::get().defaultLight()->lightPower();
+		ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
+		ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
+		ImGui::End();
 	}
 
 	// Material
@@ -139,6 +171,7 @@ void UiLayer::onUpdate(double deltaTime)
 		Renderer::releaseVersion(),
 		Application::get().fps());
 	ImGui::End();
+#endif 
 }
 
 void UiLayer::end()
