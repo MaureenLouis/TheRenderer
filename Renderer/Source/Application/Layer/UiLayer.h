@@ -29,5 +29,6 @@ public:
 
 private:
 	GLFWwindow* _windowHandle;
-	
+	char* _buf;
+	int _width, _height;
 };

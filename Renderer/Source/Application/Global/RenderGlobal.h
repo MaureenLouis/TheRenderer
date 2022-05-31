@@ -11,6 +11,9 @@ public:
 	int _trackMode;   
 	bool _mouseDown;
 	entt::entity _currentEntity;
+	unsigned int _fbo;
+	unsigned int _renderTexture;
+
 private:
 	RenderGlobal();
 

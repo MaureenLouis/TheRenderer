@@ -6,33 +6,25 @@
 #include "Renderer/Scene/Scene.h"
 #include "Application/Global/RenderGlobal.h"
 
-static void constructCallBack()
-{
-	APP_INFO("Hi!");
-}
-
 RenderLayer::RenderLayer()
 {
 	_trackBall = Scene::get().trackBall();
 
 	_gridObject = std::make_unique<GridObject>();
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
-	// _teapot = std::make_shared<MeshComponent>(_trackBall);
-    
-	// Scene::get().registerEntity<MeshComponent>(_teapotEntity);
 
 	 _teapotEntity = Scene::get().createEntity();
 	 RenderGlobal::get()._currentEntity = _teapotEntity;
-	//Scene::get().registry().on_construct<MeshComponent>().connect<&constructCallBack>();
 	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
 
 }
 
 void RenderLayer::onAttach()
 {
+	// Viewport
 	glEnable(GL_DEPTH_TEST);
 
-    // Enable alpha channel
+	// Enable alpha channel
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -40,21 +32,69 @@ void RenderLayer::onAttach()
 	int height = Application::getPtr()->window()->height();
 
 	glViewport(0, 0, width, height);
+
+#if 1
+	// FBO
+	unsigned int& _fbo = RenderGlobal::get()._fbo;
+	glGenFramebuffers(1, &_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+
+	// Texture attachment
+	unsigned int& renderTexture = RenderGlobal::get()._renderTexture;
+	glGenTextures(1, &renderTexture);
+	glBindTexture(GL_TEXTURE_2D, renderTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture, 0);
+
+	// Depth buffer attachment
+	glGenTextures(1, &_depthTexture);
+	glBindTexture(GL_TEXTURE_2D, _depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture, 0);
+
+	// Render buffer attachment
+	glGenRenderbuffers(1, &_rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, _rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo);
+
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+	{
+		APP_INFO("FBO complete!");
+	}
+#endif
+
+
 }
 
 void RenderLayer::onDetach()
 {
 	glDisable(GL_DEPTH_TEST);
+
+#if 1
+	unsigned int& fbo = RenderGlobal::get()._fbo;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &fbo);
+#endif
 }
 
 void RenderLayer::onUpdate(double deltaTime)
 {
-
 	static double runningTime = 0.0;
 	// static glm::vec3 pos = _camera->position();
 
-	glClearColor(0.f, 0.f, 0.f, 1.0f);
+#if 1
+	unsigned int& fbo = RenderGlobal::get()._fbo;
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+#endif
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 #if 0
 	_gridObject->shader()->setUniform("m", m);
@@ -79,6 +119,9 @@ void RenderLayer::onUpdate(double deltaTime)
 
 	_coordObject->draw();
 
+#if 1
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#endif
 }
 
 void RenderLayer::onEvent(Event& event)

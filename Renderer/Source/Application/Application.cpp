@@ -109,6 +109,7 @@ void Application::ApplicationPrivate::run()
 			frameCount = 0;
 		}
 #endif
+		glClearColor(0.f, 0.f, 0.f, 1.0f);
 
 		for (Layer* layer : _layerStack)
 		{

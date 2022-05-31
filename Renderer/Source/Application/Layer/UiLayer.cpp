@@ -39,6 +39,11 @@ void UiLayer::onAttach()
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(_windowHandle, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
+
+	_width = Application::get().window()->width();
+	_height = Application::get().window()->height();
+
+	_buf = new char[_width * _height * 3];
 }
 
 void UiLayer::onDetach()
@@ -47,6 +52,12 @@ void UiLayer::onDetach()
 	ImGui_ImplGlfw_Shutdown();
 	// Cleanup
 	ImGui::DestroyContext();
+
+	if (_buf)
+	{
+		delete _buf;
+		_buf = nullptr;
+	}
 }
 
 void UiLayer::begin()
@@ -59,8 +70,33 @@ void UiLayer::begin()
 const float toolbarSize = 250;
 const float menuBarHeight = 200;
 
+
 void UiLayer::onUpdate(double deltaTime)
 {
+	UNUSED(deltaTime);
+
+	// glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+	// viewport
+#if 1
+	ImGui::Begin("Scene Window");
+
+	unsigned int& fbo = RenderGlobal::get()._fbo;
+
+	//glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	ImVec2 pos = ImGui::GetCursorScreenPos();
+
+	ImGui::GetWindowDrawList()->AddImage(
+		(void*)fbo,
+		ImVec2(ImGui::GetCursorScreenPos()),
+		ImVec2(ImGui::GetCursorScreenPos().x + _width, ImGui::GetCursorScreenPos().y + _height ), ImVec2(0, 1), ImVec2(1, 0));
+
+	ImGui::End();
+#endif
+
 	UNUSED(deltaTime);
 
 	// View mode
@@ -71,12 +107,14 @@ void UiLayer::onUpdate(double deltaTime)
 	MenuBar::draw();
 
 	// Light position
-	ImGui::Begin("Default light");
-    glm::vec3& pos = Scene::get().defaultLight()->position();
-	float& lightPower = Scene::get().defaultLight()->lightPower();
-	ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
-	ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
-	ImGui::End();
+	{
+	    ImGui::Begin("Default light");
+	    glm::vec3& pos = Scene::get().defaultLight()->position();
+	    float& lightPower = Scene::get().defaultLight()->lightPower();
+	    ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
+	    ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
+	    ImGui::End();
+	}
 
 	// Material
 	auto currentEntity = RenderGlobal::get()._currentEntity;
@@ -96,12 +134,11 @@ void UiLayer::onUpdate(double deltaTime)
 	// Information
 	ImGui::Begin("Information");
 	ImGui::Text("Vendor: %s\nRenderer: %s\nVersion: %s\nFps: %f",
-		Renderer::vender(), 
-		Renderer::rendererName(), 
-		Renderer::releaseVersion(), 
+		Renderer::vender(),
+		Renderer::rendererName(),
+		Renderer::releaseVersion(),
 		Application::get().fps());
 	ImGui::End();
-
 }
 
 void UiLayer::end()

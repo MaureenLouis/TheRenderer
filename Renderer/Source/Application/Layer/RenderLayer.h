@@ -70,4 +70,8 @@ public:
 
 
 	float _cameraDist;
+
+	unsigned int _rbo;
+	unsigned int _frameTexture;
+	unsigned int _depthTexture;
 };
