@@ -13,6 +13,7 @@ public:
 	bool _mouseDown;
 	entt::entity _currentEntity;
 	unsigned int _fbo;
+	unsigned int _renderTexture;
 	Ref<FrameBuffer> _frameBuffer;
 
 private:

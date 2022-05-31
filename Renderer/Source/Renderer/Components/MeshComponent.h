@@ -6,7 +6,7 @@ class MeshComponent
 {
 	SELF(MeshComponent);
 public:
-	MeshComponent(Ref<TrackBall>& trackBall);
+	MeshComponent(Ref<TrackBall>& trackBall, const char* path);
 
 	void draw();
 	std::vector<Ref<Material>> materials();

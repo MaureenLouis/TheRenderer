@@ -20,6 +20,8 @@ public:
 	Ref<Mesh> processMesh(aiMesh* mesh, const aiScene* scene);
 	virtual std::vector<Ref<Mesh>> meshes()override { return _meshes; } ;
 
+	void loadMaterialTextures(aiMaterial* mat, aiTextureType type, const char* typeName);
+
 private:
 	std::vector<Ref<Mesh>>  _meshes;
 

@@ -9,6 +9,7 @@ static constexpr unsigned int getOpenGLChannels(int internalChannel)
 	{
 	case (GL_RGB): channels = 3; break;
 	case (GL_RGBA): channels = 4; break;
+	case (GL_DEPTH_COMPONENT): channels = 1; break;
 	default: ASSERT(false, "Unknown opengl internal channels");
 	}
 
@@ -26,7 +27,7 @@ Texture2D::Texture2D(const char* path)
 	glGenTextures(1, &_handle);
 	Self::bind();
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, loader.data());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, loader.textureChannels(), GL_UNSIGNED_BYTE, loader.data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -53,3 +54,4 @@ Texture2D::~Texture2D()
 {
 	glDeleteTextures(1, &_handle);
 }
+

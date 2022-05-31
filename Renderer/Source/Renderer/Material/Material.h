@@ -12,4 +12,5 @@ public:
 	glm::vec4 _specularColor;
 	float _glossiness;
 	float _specularLevel;
+
 };

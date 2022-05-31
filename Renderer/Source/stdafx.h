@@ -23,6 +23,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <fstream>
+#include <unordered_map>
 
 // The Renderer
 #include "Fundation/Log/Log.h"

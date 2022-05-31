@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(Ref<TrackBall>& trackBall)
+MeshComponent::MeshComponent(Ref<TrackBall>& trackBall, const char* path)
 	: _trackBall(trackBall)
 {
-	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\teapot.obj");
-
+	_model = std::make_unique<Model>(path);
 }
 
 void MeshComponent::draw()

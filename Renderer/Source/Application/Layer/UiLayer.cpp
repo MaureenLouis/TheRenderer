@@ -115,14 +115,13 @@ void UiLayer::onUpdate(double deltaTime)
 	// viewport
 	ImGui::Begin("Scene Window");
 
-	unsigned int fbo = RenderGlobal::get()._frameBuffer->handle();
-
+	//unsigned int fbo = RenderGlobal::get()._frameBuffer->handle();
 	//glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 
 	ImGui::GetWindowDrawList()->AddImage(
-		(void*)fbo,
+		(void*)RenderGlobal::get()._fbo,
 		ImVec2(ImGui::GetCursorScreenPos()),
 		ImVec2(ImGui::GetCursorScreenPos().x + _width, ImGui::GetCursorScreenPos().y + _height ), ImVec2(0, 1), ImVec2(1, 0));
 

@@ -87,35 +87,51 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	Ref<Material> mat = std::make_shared<Material>();
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-	aiColor4D color4;
-	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
+	if (material != nullptr)
 	{
-		mat->_diffuseColor = ASS_TO_GLM(color4);
+		aiColor4D color4;
+		if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
+		{
+			mat->_diffuseColor = ASS_TO_GLM(color4);
+		}
+
+		if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color4))
+		{
+			mat->_ambientColor = ASS_TO_GLM(color4);
+		}
+
+		if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color4))
+		{
+			mat->_specularColor = ASS_TO_GLM(color4);
+		}
+
+		float value;
+		if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
+		{
+			mat->_glossiness = value;
+		}
+
+		if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS_STRENGTH, &value))
+		{
+			mat->_specularLevel = value;
+		}
 	}
 
-	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color4))
-	{
-		mat->_ambientColor = ASS_TO_GLM(color4);
-	}
-
-	if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color4))
-	{
-		mat->_specularColor = ASS_TO_GLM(color4);
-	}
-
-	float value;
-	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
-	{
-		mat->_glossiness = value;
-	}
-
-	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS_STRENGTH, &value))
-	{
-		mat->_specularLevel = value;
-	}
 
 	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));
+}
+
+void ModelLoaderAssimp::loadMaterialTextures(aiMaterial* mat, aiTextureType type, const char* typeName)
+{
+	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		// Get texture path
+		aiString path;
+		mat->GetTexture(type, i, &path);
+
+		// Save texture and load it into memory
+	}
 }

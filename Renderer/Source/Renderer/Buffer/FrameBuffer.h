@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer/Texture/Texture.h"
+#include "Renderer/Texture/DepthTexture.h"
 #include "Renderer/Buffer/RenderBuffer.h"
 
 class FrameBuffer
@@ -14,7 +15,7 @@ public:
 	unsigned int handle() { return _handle; }
 
 	void attachColor(GLenum attachment, Ref<Texture2D>& texture);
-	void attachDepth(Ref<Texture2D>& texture);
+	void attachDepth(Ref<DepthTexture>& texture);
 	void attachStencil(Ref<RenderBuffer>& texture);
 
 	bool verifyFramebufferStatus();

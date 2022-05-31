@@ -15,7 +15,7 @@ RenderLayer::RenderLayer()
 
 	 _teapotEntity = Scene::get().createEntity();
 	 RenderGlobal::get()._currentEntity = _teapotEntity;
-	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
+	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.obj");
 }
 
 #include "Renderer/Buffer/FrameBuffer.h"
@@ -34,26 +34,27 @@ void RenderLayer::onAttach()
 
 	glViewport(0, 0, width, height);
 
-
-	Ref<FrameBuffer> frameBuffer = std::make_shared<FrameBuffer>(width, height);
+#if 0
+	RenderGlobal::get()._frameBuffer = std::make_shared<FrameBuffer>(width, height);
+	RenderGlobal::get()._frameBuffer->bind();
     
 	Ref<Texture2D> colorTexture = std::make_shared<Texture2D>(width, height);
-    frameBuffer->attachColor(GL_COLOR_ATTACHMENT0, colorTexture);
+	RenderGlobal::get()._frameBuffer->attachColor(GL_COLOR_ATTACHMENT0, colorTexture);
 
-	Ref<Texture2D> depthTexture = std::make_shared<Texture2D>(width, height);
-	frameBuffer->attachDepth(depthTexture);
+	Ref<DepthTexture> depthTexture = std::make_shared<DepthTexture>(width, height);
+	RenderGlobal::get()._frameBuffer->attachDepth(depthTexture);
 
 	Ref<RenderBuffer> renderBuffer = std::make_shared<RenderBuffer>(width, height);
-	frameBuffer->attachStencil(renderBuffer);
+	RenderGlobal::get()._frameBuffer->attachStencil(renderBuffer);
 
-	if (frameBuffer->verifyFramebufferStatus())
+	if (RenderGlobal::get()._frameBuffer->verifyFramebufferStatus())
 	{
 		APP_INFO("FBO no problem");
 	}
+#endif
 
-	RenderGlobal::get()._frameBuffer = frameBuffer;
 
-#if 0
+#if 1
 	// FBO
 	unsigned int& _fbo = RenderGlobal::get()._fbo;
 	glGenFramebuffers(1, &_fbo);
@@ -96,7 +97,7 @@ void RenderLayer::onDetach()
 {
 	glDisable(GL_DEPTH_TEST);
 
-#if 0
+#if 1
 	unsigned int& fbo = RenderGlobal::get()._fbo;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &fbo);
@@ -105,11 +106,11 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
+    unsigned int& fbo = RenderGlobal::get()._fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+#if 0
 
-#if 1
-	//unsigned int& fbo = RenderGlobal::get()._fbo;
-	// glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	RenderGlobal::get()._frameBuffer->bind();
 #endif
@@ -140,8 +141,8 @@ void RenderLayer::onUpdate(double deltaTime)
 	_coordObject->draw();
 
 #if 1
-	// glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	RenderGlobal::get()._frameBuffer->unbind();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//RenderGlobal::get()._frameBuffer->unbind();
 
 #endif
 }

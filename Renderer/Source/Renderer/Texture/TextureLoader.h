@@ -18,5 +18,6 @@ private:
 	int            _channels;
 	unsigned char* _data;
 	const char*    _path;
+	unsigned int   _format;
 };
 
