@@ -96,10 +96,10 @@ void UiLayer::onUpdate(double deltaTime)
 	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
-	bool* p_open;
+	bool p_open = true ;
 	if (!opt_padding)
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("Docking Space", p_open, window_flags);
+	ImGui::Begin("Docking Space", &p_open, window_flags);
 	if (!opt_padding)
 		ImGui::PopStyleVar();
 
@@ -115,7 +115,7 @@ void UiLayer::onUpdate(double deltaTime)
 	// viewport
 	ImGui::Begin("Scene Window");
 
-	unsigned int& fbo = RenderGlobal::get()._fbo;
+	unsigned int fbo = RenderGlobal::get()._frameBuffer->handle();
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 

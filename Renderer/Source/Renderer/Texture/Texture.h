@@ -6,7 +6,7 @@ class Texture2D
 
 public:
 	Texture2D(const char* path);
-	Texture2D();    // Empty texture with only memory allocation.
+	Texture2D(unsigned int width, unsigned int height);    // Empty texture with only memory allocation.
 	~Texture2D();
 	
 	void bind() const

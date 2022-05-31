@@ -37,6 +37,9 @@
 #include "Application/Global/RenderGlobal.h"
 #include "Application/Global/Config.h"
 #include "Fundation/Assert/Assert.h"
+#include "Fundation/Assert/StaticAssert.h"
+#include "Renderer/Buffer/FrameBuffer.h"
+
 
 // GLM
 #include "glm/glm.hpp"

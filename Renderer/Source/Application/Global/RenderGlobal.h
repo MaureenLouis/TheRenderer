@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/OO/Singleton.h"
+#include "Renderer/Buffer/FrameBuffer.h"
 #include "entt.hpp"
 
 class RenderGlobal
@@ -12,7 +13,7 @@ public:
 	bool _mouseDown;
 	entt::entity _currentEntity;
 	unsigned int _fbo;
-	unsigned int _renderTexture;
+	Ref<FrameBuffer> _frameBuffer;
 
 private:
 	RenderGlobal();

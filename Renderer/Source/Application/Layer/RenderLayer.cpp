@@ -18,6 +18,8 @@ RenderLayer::RenderLayer()
 	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
 }
 
+#include "Renderer/Buffer/FrameBuffer.h"
+
 void RenderLayer::onAttach()
 {
 	// Viewport
@@ -32,7 +34,26 @@ void RenderLayer::onAttach()
 
 	glViewport(0, 0, width, height);
 
-#if 1
+
+	Ref<FrameBuffer> frameBuffer = std::make_shared<FrameBuffer>(width, height);
+    
+	Ref<Texture2D> colorTexture = std::make_shared<Texture2D>(width, height);
+    frameBuffer->attachColor(GL_COLOR_ATTACHMENT0, colorTexture);
+
+	Ref<Texture2D> depthTexture = std::make_shared<Texture2D>(width, height);
+	frameBuffer->attachDepth(depthTexture);
+
+	Ref<RenderBuffer> renderBuffer = std::make_shared<RenderBuffer>(width, height);
+	frameBuffer->attachStencil(renderBuffer);
+
+	if (frameBuffer->verifyFramebufferStatus())
+	{
+		APP_INFO("FBO no problem");
+	}
+
+	RenderGlobal::get()._frameBuffer = frameBuffer;
+
+#if 0
 	// FBO
 	unsigned int& _fbo = RenderGlobal::get()._fbo;
 	glGenFramebuffers(1, &_fbo);
@@ -42,6 +63,7 @@ void RenderLayer::onAttach()
 	unsigned int& renderTexture = RenderGlobal::get()._renderTexture;
 	glGenTextures(1, &renderTexture);
 	glBindTexture(GL_TEXTURE_2D, renderTexture);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -74,7 +96,7 @@ void RenderLayer::onDetach()
 {
 	glDisable(GL_DEPTH_TEST);
 
-#if 1
+#if 0
 	unsigned int& fbo = RenderGlobal::get()._fbo;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &fbo);
@@ -86,8 +108,10 @@ void RenderLayer::onUpdate(double deltaTime)
 
 
 #if 1
-	unsigned int& fbo = RenderGlobal::get()._fbo;
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	//unsigned int& fbo = RenderGlobal::get()._fbo;
+	// glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	RenderGlobal::get()._frameBuffer->bind();
 #endif
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -116,7 +140,9 @@ void RenderLayer::onUpdate(double deltaTime)
 	_coordObject->draw();
 
 #if 1
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	RenderGlobal::get()._frameBuffer->unbind();
+
 #endif
 }
 
