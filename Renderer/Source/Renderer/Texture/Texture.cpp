@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Texture.h"
+#include "TextureLoader.h"
 
 Texture2D::Texture2D(const char* path)
 {
@@ -11,18 +12,19 @@ Texture2D::Texture2D(const char* path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	unsigned char* data = stbi_load(path, &_width, &_height, &_channels, 0);
-	if (!data)
-	{
-		APP_ERROR("Fail to load image as texture");
-		return;
-	}
+	TextureLoader loader(path);
+	_width = loader.textureWidth();
+	_height = loader.textureHeight();
+	_channels = loader.textureChannels();
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, loader.data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
 
-	stbi_image_free(data);
+Texture2D::Texture2D()
+{
+
 }
 
 Texture2D::~Texture2D()

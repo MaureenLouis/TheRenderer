@@ -56,6 +56,7 @@
 // Windows 
 #include <Windows.h>
 #include <PathCch.h>
+#include <tchar.h>
 
 // entt
 #include "entt.hpp"
@@ -64,3 +65,4 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+

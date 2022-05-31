@@ -15,8 +15,7 @@ RenderLayer::RenderLayer()
 
 	 _teapotEntity = Scene::get().createEntity();
 	 RenderGlobal::get()._currentEntity = _teapotEntity;
-	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
-
+	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall);
 }
 
 void RenderLayer::onAttach()
@@ -69,8 +68,6 @@ void RenderLayer::onAttach()
 		APP_INFO("FBO complete!");
 	}
 #endif
-
-
 }
 
 void RenderLayer::onDetach()
@@ -86,8 +83,7 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
-	static double runningTime = 0.0;
-	// static glm::vec3 pos = _camera->position();
+
 
 #if 1
 	unsigned int& fbo = RenderGlobal::get()._fbo;
