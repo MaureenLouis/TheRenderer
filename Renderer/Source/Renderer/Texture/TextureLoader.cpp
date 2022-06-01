@@ -30,3 +30,5 @@ TextureLoader::~TextureLoader()
 	stbi_image_free(_data);
 }
 
+
+

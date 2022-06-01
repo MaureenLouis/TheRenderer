@@ -71,7 +71,7 @@ void UiLayer::onUpdate(double deltaTime)
 	UNUSED(deltaTime);
 	
 	
-#if 1
+#if 0
 	static bool opt_fullscreen = true;
 	static bool opt_padding = false;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -110,7 +110,7 @@ void UiLayer::onUpdate(double deltaTime)
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
 	ImGui::End();
-#endif
+
 
 	// viewport
 	ImGui::Begin("Scene Window");
@@ -127,8 +127,7 @@ void UiLayer::onUpdate(double deltaTime)
 
 	ImGui::End();
 
-
-
+#endif
 	// View mode
 	ViewmodeControl::draw();
 #if 1

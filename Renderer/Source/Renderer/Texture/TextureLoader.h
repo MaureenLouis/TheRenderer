@@ -8,7 +8,7 @@ public:
 
 	int textureWidth() { return _width; }
 	int textureHeight() { return _height; }
-
+	unsigned int internalForamt() { return _format; }
 	int textureChannels() { return _channels; };
 	unsigned char* data() { return _data; };
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "Renderer/Texture/TextureSet.h"
 
 class Material
 {
@@ -13,4 +14,5 @@ public:
 	float _glossiness;
 	float _specularLevel;
 
+	TextureSet _textureSet;
 };

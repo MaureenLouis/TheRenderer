@@ -16,6 +16,8 @@ static constexpr unsigned int getOpenGLChannels(int internalChannel)
 	return channels;
 }
 
+
+
 Texture2D::Texture2D(const char* path)
 {
 
@@ -27,7 +29,7 @@ Texture2D::Texture2D(const char* path)
 	glGenTextures(1, &_handle);
 	Self::bind();
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, loader.textureChannels(), GL_UNSIGNED_BYTE, loader.data());
+	glTexImage2D(GL_TEXTURE_2D, 0, loader.internalForamt(), _width, _height, 0, loader.internalForamt(), GL_UNSIGNED_BYTE, loader.data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

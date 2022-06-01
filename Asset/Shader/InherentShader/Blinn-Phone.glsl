@@ -36,7 +36,7 @@ uniform float glossiness;
 uniform vec4  specularColor;
 uniform float specularLevel;
 uniform float lightPower;
-const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+const   vec3 lightColor = vec3(1.0, 1.0, 1.0);
 uniform vec4 ambientColor;
 uniform float ambientLevel;
 

@@ -123,7 +123,7 @@ Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, 
 	_indexBuffer = std::make_shared<IndexBuffer>((int*)&_indices[0],  _indices.size());
 	_vertexArray->setIndexBuffer(_indexBuffer);
 
-	_program = std::make_unique<ShaderProgram>("D:\\Projects\\TheRenderer\\Asset\\Shader\\InherentShader\\Blinn-Phone.glsl");
+	_program = std::make_unique<ShaderProgram>("D:\\Projects\\TheRenderer\\Asset\\Shader\\InherentShader\\BlinnPhongWithNormal.fx");
 }
 
 void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
@@ -158,6 +158,15 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 
 	Ref<TrackBall> trackBall = Scene::get().trackBall();
 	_program->setUniform("viewPos", trackBall->cameraPosition());
+
+    // Texture
+	// glActiveTexture(GL_TEXTURE0);
+	//_texture->bind();
+
+    glActiveTexture(GL_TEXTURE0);
+    _material->_textureSet._normalMaps[0]->bind();
+
+    _program->setUniform("normalMap", 0);
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

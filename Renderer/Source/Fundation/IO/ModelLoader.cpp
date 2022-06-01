@@ -2,6 +2,7 @@
 #include "ModelLoader.h"
 #include "Fundation/Model/Model.h"
 #include "ModelLoaderUtils.h"
+#include "Renderer/Texture/TextureManager.h"
 
 ModelLoaderAssimp::ModelLoaderAssimp(const char* path)
 {
@@ -32,7 +33,6 @@ void ModelLoaderAssimp::processNode(aiNode* node, const aiScene* scene)
 		Self::processNode(node->mChildren[i], scene);
 	}
 }
-
 
 Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 {
@@ -67,7 +67,6 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex._bitangent.x = mesh->mBitangents[i].x;
 			vertex._bitangent.y = mesh->mBitangents[i].y;
 			vertex._bitangent.z = mesh->mBitangents[i].z;
-
 		}
 		else
 		{
@@ -92,6 +91,7 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	if (material != nullptr)
 	{
+		// Material color
 		aiColor4D color4;
 		if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color4))
 		{
@@ -108,6 +108,7 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 			mat->_specularColor = ASS_TO_GLM(color4);
 		}
 
+		// Material level
 		float value;
 		if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &value))
 		{
@@ -118,20 +119,37 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 		{
 			mat->_specularLevel = value;
 		}
+		
+		// Textures
+		std::vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+		mat->_textureSet._diffuseMaps = std::move(diffuseMaps);
+
+		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT);
+		mat->_textureSet._normalMaps = std::move(normalMaps);
 	}
 
 
 	return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(mat));
 }
 
-void ModelLoaderAssimp::loadMaterialTextures(aiMaterial* mat, aiTextureType type, const char* typeName)
+std::vector<Ref<Texture2D>> ModelLoaderAssimp::loadMaterialTextures(aiMaterial* mat, aiTextureType type/*, const char* typeName*/)
 {
+	std::vector<Ref<Texture2D>> textureSet;
+
+	const char* modelRootDir = "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient";
+	static char fullPath[128] = { 0 };
+
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		// Get texture path
 		aiString path;
 		mat->GetTexture(type, i, &path);
 
+	    sprintf(fullPath, "%s\\%s", modelRootDir, path.C_Str());
 		// Save texture and load it into memory
+		Ref<Texture2D> texture = TextureManager::get().registerTexture(fullPath);
+		textureSet.push_back(texture);
 	}
+
+	return textureSet;
 }

@@ -5,20 +5,20 @@
 #include "Application/Event/MouseEvent.h"
 #include "Renderer/Scene/Scene.h"
 #include "Application/Global/RenderGlobal.h"
+#include "Renderer/Buffer/FrameBuffer.h"
 
 RenderLayer::RenderLayer()
 {
 	_trackBall = Scene::get().trackBall();
 
 	_gridObject = std::make_unique<GridObject>();
-	_coordObject = std::make_shared<CoordObject>(_trackBall);
+	//_coordObject = std::make_shared<CoordObject>(_trackBall);
 
 	 _teapotEntity = Scene::get().createEntity();
 	 RenderGlobal::get()._currentEntity = _teapotEntity;
 	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.obj");
 }
 
-#include "Renderer/Buffer/FrameBuffer.h"
 
 void RenderLayer::onAttach()
 {
@@ -54,7 +54,7 @@ void RenderLayer::onAttach()
 #endif
 
 
-#if 1
+#if 0
 	// FBO
 	unsigned int& _fbo = RenderGlobal::get()._fbo;
 	glGenFramebuffers(1, &_fbo);
@@ -106,12 +106,12 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
+#if 0
     unsigned int& fbo = RenderGlobal::get()._fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+#endif
 
 #if 0
-
-
 	RenderGlobal::get()._frameBuffer->bind();
 #endif
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -138,12 +138,14 @@ void RenderLayer::onUpdate(double deltaTime)
 		meshComponent.draw();
 	}
 
-	_coordObject->draw();
+	//_coordObject->draw();
 
-#if 1
+#if 0
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//RenderGlobal::get()._frameBuffer->unbind();
+#endif
 
+#if 0
+	RenderGlobal::get()._frameBuffer->unbind();
 #endif
 }
 
@@ -161,12 +163,9 @@ void RenderLayer::onEvent(Event& event)
 bool RenderLayer::onMousePress(MousePressEvent& event)
 {
 	int trackMode = RenderGlobal::get()._trackMode;
-	//if (trackMode == 0 || trackMode == 2)
-	//{
 		RenderGlobal::get()._mouseDown = true;
 	    _trackBall->mouseDown({(float)event.cursorPos().x(), (float)event.cursorPos().y()});
 	    PointD pos = event.cursorPos();
-	//}
 
 	return true;
 }
@@ -174,10 +173,7 @@ bool RenderLayer::onMousePress(MousePressEvent& event)
 bool RenderLayer::onMouseRelease(MouseReleaseEvent& event)
 {
 	int trackMode = RenderGlobal::get()._trackMode;
-	//if (trackMode == 0)
-	//{
 		RenderGlobal::get()._mouseDown = false;
-	//}
 
 	return true;
 }

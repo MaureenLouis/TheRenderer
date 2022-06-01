@@ -52,6 +52,7 @@
 // std
 #include <cassert>
 #include <stdio.h>
+#include <time.h>
 
 
 // stbimage

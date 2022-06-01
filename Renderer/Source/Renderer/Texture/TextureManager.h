@@ -5,11 +5,14 @@
 class TextureManager
 {
 	GENERATE_SINGLETON(TextureManager);
+	using ManagerType = std::unordered_map<std::string, Ref<Texture2D>>;
 
+public:
+	Ref<Texture2D> registerTexture(const char* path);
 private:
 	TextureManager() = default;
 	~TextureManager() = default;
 
 private:
-	std::unordered_map<int, Ref<Texture2D>> _manager;
+	ManagerType _manager;
 };

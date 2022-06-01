@@ -10,5 +10,5 @@ public:                                                                     \
     }                                                                       \
     NO_COPY(className)                                                      \
     NO_MOVE(className)                                                      \
-public:
+private:
 
