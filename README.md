@@ -5,4 +5,8 @@ ScreenShots:
 
 A teapot model imported from 3dsmax with a simple material.
 
+## Blinn shader
 ![image](https://github.com/MaureenLouis/TheRenderer/blob/main/Documentation/Pics/pic_1.png)
+
+## Blinn shader with normal map
+![image](https://github.com/MaureenLouis/TheRenderer/blob/main/Documentation/Pics/pic_normal.png)
