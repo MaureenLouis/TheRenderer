@@ -142,7 +142,7 @@ void UiLayer::onUpdate(double deltaTime)
 		glm::vec3& pos = Scene::get().defaultLight()->position();
 		float& lightPower = Scene::get().defaultLight()->lightPower();
 		ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
-		ImGui::SliderFloat("Light power", &lightPower, 0.f, 1000.f);
+		ImGui::SliderFloat("Light power", &lightPower, 0.f, 30.f);
 		ImGui::End();
 	}
 

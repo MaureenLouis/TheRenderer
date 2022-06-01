@@ -3,5 +3,5 @@
 
 LightComponent::LightComponent()
 {
-	_lightPower = 40.f;
+	_lightPower = 10.f;
 }

@@ -90,7 +90,7 @@ void main()
 
 	/* light direction */
 	vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
-	float lightDistance = length(lightDir);
+	float lightDistance = length(fs_in.TangentLightPos - fs_in.TangentFragPos);
 
 	/* diffuse color */
 	float lambertia = max(dot(lightDir, normal), 0.0);
@@ -105,5 +105,16 @@ void main()
 	float spec = pow(max(dot(normal, halfwayDir), 0.0), glossiness);
 	vec3 specular = specularColor.xyz * spec * lightColor * specularLevel;
 
-	FragColor = vec4(ambient + diffuse /** lightPower / lightDistance*/ + specular /** lightPower / lightDistance*/, 1.f);
+
+	/* attenuation */
+	float attenuation = lightPower / (lightDistance * lightDistance);
+
+	vec3 outputColor = ambient + diffuse * attenuation + specular * attenuation;
+	
+	
+	/*
+	    float gamma = 2.2;
+	    FragColor = vec4(pow(outputColor, vec3(1.0 / gamma)), 1.0);
+	*/
+	FragColor = vec4(outputColor, 1.0);
 }
