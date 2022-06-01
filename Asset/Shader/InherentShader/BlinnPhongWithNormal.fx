@@ -67,6 +67,7 @@ in VS_OUT
 } fs_in;
 
 uniform sampler2D normalMap;
+uniform sampler2D diffuseMap;
 uniform vec4 diffuseColor;
 uniform vec4  specularColor;
 uniform float glossiness;
@@ -93,7 +94,8 @@ void main()
 
 	/* diffuse color */
 	float lambertia = max(dot(lightDir, normal), 0.0);
-	vec3 diffuse = lambertia * diffuseColor.xyz * lightColor;
+	/*vec3 diffuse = lambertia * diffuseColor.xyz * lightColor;*/
+	vec3 diffuse = lambertia * texture(diffuseMap, fs_in.TexCoords).rgb * lightColor;
 	
 
 	/* specular color */

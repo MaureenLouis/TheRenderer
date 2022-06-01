@@ -162,11 +162,14 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
     // Texture
 	// glActiveTexture(GL_TEXTURE0);
 	//_texture->bind();
-
     glActiveTexture(GL_TEXTURE0);
     _material->_textureSet._normalMaps[0]->bind();
-
     _program->setUniform("normalMap", 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    _material->_textureSet._diffuseMaps[0]->bind();
+    _program->setUniform("diffuseMap", 1);
+
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

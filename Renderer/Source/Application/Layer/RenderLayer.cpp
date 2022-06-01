@@ -16,7 +16,7 @@ RenderLayer::RenderLayer()
 
 	 _teapotEntity = Scene::get().createEntity();
 	 RenderGlobal::get()._currentEntity = _teapotEntity;
-	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.obj");
+	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.fbx");
 }
 
 

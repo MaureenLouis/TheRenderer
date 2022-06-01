@@ -124,7 +124,7 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 		std::vector<Ref<Texture2D>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
 		mat->_textureSet._diffuseMaps = std::move(diffuseMaps);
 
-		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT);
+		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS);
 		mat->_textureSet._normalMaps = std::move(normalMaps);
 	}
 
@@ -136,18 +136,18 @@ std::vector<Ref<Texture2D>> ModelLoaderAssimp::loadMaterialTextures(aiMaterial* 
 {
 	std::vector<Ref<Texture2D>> textureSet;
 
-	const char* modelRootDir = "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient";
-	static char fullPath[128] = { 0 };
 
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		// Get texture path
 		aiString path;
 		mat->GetTexture(type, i, &path);
+		
+		std::string relativePath(path.C_Str());
+		std::string fileName = std::string("D:\\Projects\\TheRenderer\\Asset\\Texture\\") + relativePath.substr(relativePath.find_last_of("\\") + 1);
 
-	    sprintf(fullPath, "%s\\%s", modelRootDir, path.C_Str());
 		// Save texture and load it into memory
-		Ref<Texture2D> texture = TextureManager::get().registerTexture(fullPath);
+		Ref<Texture2D> texture = TextureManager::get().registerTexture(fileName);
 		textureSet.push_back(texture);
 	}
 

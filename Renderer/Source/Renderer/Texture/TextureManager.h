@@ -8,7 +8,7 @@ class TextureManager
 	using ManagerType = std::unordered_map<std::string, Ref<Texture2D>>;
 
 public:
-	Ref<Texture2D> registerTexture(const char* path);
+	Ref<Texture2D> registerTexture(const std::string& path);
 private:
 	TextureManager() = default;
 	~TextureManager() = default;
