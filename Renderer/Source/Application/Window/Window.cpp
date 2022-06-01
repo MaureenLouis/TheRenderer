@@ -33,6 +33,10 @@ Window::Window()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	int antiAlaisingLevel = Config::get().antiAlaisingLevel();
+	glfwWindowHint(GLFW_SAMPLES, antiAlaisingLevel);
+
+
 	_primaryMonitor = glfwGetPrimaryMonitor();
 	if (_primaryMonitor == nullptr)
 	{
@@ -68,8 +72,6 @@ Window::Window()
 	_context = new OpenGLContext(_window);
 	_context->init();
 
-
-	setAntiAliasing(16);
 }
 
 Window::~Window()
@@ -77,10 +79,7 @@ Window::~Window()
 	delete _context;
 }
 
-void Window::setAntiAliasing(int level)
-{
-	glfwWindowHint(GLFW_SAMPLES, level);
-}
+
 
 void Window::setFullScreen(bool enable)
 {

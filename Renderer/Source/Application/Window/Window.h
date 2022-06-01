@@ -11,7 +11,6 @@ public:
 	Window();
 	~Window();
 
-	void setAntiAliasing(int level);
 	void setFullScreen(bool enable);
 	void shutdown();
 	void onUpdate();

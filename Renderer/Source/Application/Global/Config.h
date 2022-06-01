@@ -16,6 +16,7 @@ public:
 
 	int defaultVideoMode();
 	void setDefaultVideoMode(int viewModeIndex);
+	int& antiAlaisingLevel() { return _antialaising; }
 
 	float _mouseSensitivity = 1.f;
 
@@ -23,7 +24,7 @@ private:
 	Config();
 	~Config();
 	
-
+	int _antialaising;
 	int _currentVideoMode;
 	std::vector<GLFWvidmode> _videoModes;
 

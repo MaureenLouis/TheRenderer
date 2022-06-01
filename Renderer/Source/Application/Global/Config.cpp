@@ -46,6 +46,7 @@ Config::Config()
 	// initialize config properties
 
 	_currentVideoMode = ::GetPrivateProfileInt(TEXT("VideoMode"), TEXT("Resolution"), 0, _configPathBuf);
+	_antialaising= ::GetPrivateProfileInt(TEXT("VideoMode"), TEXT("Antialaising"), 4, _configPathBuf);
 }
 
 Config::~Config()
@@ -54,4 +55,6 @@ Config::~Config()
 	TCHAR buf[128] = { 0 };
 	::wsprintf(buf, TEXT("%d"), _currentVideoMode);
 	::WritePrivateProfileString(TEXT("VideoMode"), TEXT("Resolution"), buf, _configPathBuf);
+	::wsprintf(buf, TEXT("%d"), _antialaising);
+	::WritePrivateProfileString(TEXT("VideoMode"), TEXT("Antialaising"), buf, _configPathBuf);
 }
