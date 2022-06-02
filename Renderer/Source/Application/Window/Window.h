@@ -28,6 +28,7 @@ public:
 	Point3D<float> viewPoint();
 
 	void setDefaultVideoMode();
+	void configRenderer();
 
 private:
 	class WindowCallback;

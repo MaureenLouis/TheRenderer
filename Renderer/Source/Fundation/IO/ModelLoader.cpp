@@ -4,6 +4,12 @@
 #include "ModelLoaderUtils.h"
 #include "Renderer/Texture/TextureManager.h"
 
+static std::string getFilenameFromPath(std::string&& path)
+{
+	return path.substr(path.find_last_of("\\") + 1);
+}
+
+
 ModelLoaderAssimp::ModelLoaderAssimp(const char* path)
 {
 	Assimp::Importer importer;
@@ -126,6 +132,9 @@ Ref<Mesh> ModelLoaderAssimp::processMesh(aiMesh* mesh, const aiScene* scene)
 
 		std::vector<Ref<Texture2D>> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS);
 		mat->_textureSet._normalMaps = std::move(normalMaps);
+
+		std::vector<Ref<Texture2D>> displacementMaps = loadMaterialTextures(material, aiTextureType_DISPLACEMENT);
+		mat->_textureSet._displacementMaps = std::move(displacementMaps);
 	}
 
 
@@ -136,7 +145,6 @@ std::vector<Ref<Texture2D>> ModelLoaderAssimp::loadMaterialTextures(aiMaterial* 
 {
 	std::vector<Ref<Texture2D>> textureSet;
 
-
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		// Get texture path
@@ -144,7 +152,7 @@ std::vector<Ref<Texture2D>> ModelLoaderAssimp::loadMaterialTextures(aiMaterial* 
 		mat->GetTexture(type, i, &path);
 		
 		std::string relativePath(path.C_Str());
-		std::string fileName = std::string("D:\\Projects\\TheRenderer\\Asset\\Texture\\") + relativePath.substr(relativePath.find_last_of("\\") + 1);
+		std::string fileName = Application::textureDir() + getFilenameFromPath(std::move(relativePath));/*relativePath.substr(relativePath.find_last_of("\\") + 1)*/;
 
 		// Save texture and load it into memory
 		Ref<Texture2D> texture = TextureManager::get().registerTexture(fileName);

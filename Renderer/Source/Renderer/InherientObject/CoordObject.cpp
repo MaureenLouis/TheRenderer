@@ -7,7 +7,7 @@ CoordObject::CoordObject(Ref<TrackBall>& trackBall)
 	_trackBall = trackBall;
 	_cameraScaleRatio = 10;
 
-	const TCHAR* appRootDir = Application::get().applicationDir();
+	//const TCHAR* appRootDir = Application::get().applicationDir();
 
 
 	_model = std::make_unique<Model>("D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\arrow3d.obj");

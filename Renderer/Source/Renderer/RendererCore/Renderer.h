@@ -13,4 +13,7 @@ public:
 	static const unsigned char* rendererName();
 	static const unsigned char* releaseVersion();
 	static const unsigned char* shadingLanguageVersion();
+	static const  char* maxPatchVertices();
+
+	static void setPolygonMode(Config::PolygonMode polygonMode);
 };

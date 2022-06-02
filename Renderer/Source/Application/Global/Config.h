@@ -7,6 +7,12 @@ class Config
 	GENERATE_SINGLETON(Config);
 
 public:
+	enum class PolygonMode : uint8_t
+	{
+		Fill = 0, Line = 1
+	};
+
+
 	using VideoModes = std::vector<GLFWvidmode>;
 	void setVideoModes(const GLFWvidmode* videoModes, int count);
 	
@@ -19,6 +25,8 @@ public:
 	int& antiAlaisingLevel() { return _antialaising; }
 
 	float _mouseSensitivity = 1.f;
+	int   _patchVertices;
+	int   _polygonMode;    // 0: fill mode 1: line mode
 
 private:
 	Config();

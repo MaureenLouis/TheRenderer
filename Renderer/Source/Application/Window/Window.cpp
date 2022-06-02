@@ -29,13 +29,14 @@ Window::Window()
 		return;
 	}
 
+	// OpenGL Version
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	// MSAA
 	int antiAlaisingLevel = Config::get().antiAlaisingLevel();
 	glfwWindowHint(GLFW_SAMPLES, antiAlaisingLevel);
-
 
 	_primaryMonitor = glfwGetPrimaryMonitor();
 	if (_primaryMonitor == nullptr)
@@ -44,13 +45,13 @@ Window::Window()
 		return;
 	}
 
+	// Video mode
 	_videoModes = glfwGetVideoModes(_primaryMonitor, &_videoModeCount);
 	if (_videoModeCount == 0 || _videoModes == nullptr)
 	{
 		APP_ERROR("Fail to get video modes information");
 		return;
 	}
-
 
 	Config::get().setVideoModes(_videoModes, _videoModeCount);
 
@@ -72,6 +73,8 @@ Window::Window()
 	_context = new OpenGLContext(_window);
 	_context->init();
 
+	// Renderer Configs
+	Self::configRenderer();
 }
 
 Window::~Window()
@@ -223,5 +226,12 @@ void Window::setDefaultVideoMode()
 
 	_currentWindowWidth = _videoModes[defaultVideoMode].width;
 	_currentWindowHeight = _videoModes[defaultVideoMode].height;
+}
+
+void Window::configRenderer()
+{
+	// Tessellation
+	int patchVertices = Config::get()._patchVertices;
+	glPatchParameteri(GL_PATCH_VERTICES, patchVertices);
 }
 

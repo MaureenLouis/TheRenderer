@@ -46,7 +46,8 @@ public:
 	void registerWindow(Window* window);
 
 	static const TCHAR* applicationDir();
-
+	static const std::string& textureDir();
+	
 private:
 	Application();
 

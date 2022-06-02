@@ -1,25 +1,34 @@
 #include "stdafx.h"
 #include "ViewModeControl.h"
+#include "Renderer/RendererCore/Renderer.h"
 
 void ViewmodeControl::draw()
 {
-	ImGui::Begin("View control");
+	    ImGui::Begin("View control");
+	    int& trackMode = RenderGlobal::get()._trackMode;
+	    ImGui::RadioButton("Rotate", &trackMode, 0), ImGui::SameLine();
+	    ImGui::RadioButton("Scale", &trackMode, 1), ImGui::SameLine();
+	    ImGui::RadioButton("Pan", &trackMode, 2), ImGui::SameLine();
+	    ImGui::RadioButton("Select", &trackMode, 3);
+	    ImGui::End();
 
-	int& trackMode = RenderGlobal::get()._trackMode;
-	ImGui::RadioButton("Rotate", &trackMode, 0), ImGui::SameLine();
-	ImGui::RadioButton("Scale", &trackMode, 1), ImGui::SameLine();
-	ImGui::RadioButton("Pan", &trackMode, 2), ImGui::SameLine();
-	ImGui::RadioButton("Select", &trackMode, 3);
-	ImGui::End();
+
+	    ImGui::Begin("Polygon mode");
+	    int& polygonMode = Config::get()._polygonMode;
+		ImGui::RadioButton("Fill", &polygonMode, 0), ImGui::SameLine();
+		ImGui::RadioButton("Line", &polygonMode, 1);
+		ImGui::End();
+
+		Renderer::setPolygonMode(Config::PolygonMode(polygonMode));
+
 }
 
 
 void DisplaySettings::draw()
 {
-	if (ImGui::Begin("Display settings"))
-	{
-		if (ImGui::Begin("Resolution"))
-		{
+	ImGui::Begin("Display settings");
+	
+	ImGui::Begin("Resolution");
 		    const Config::VideoModes& videoModes = Config::get().videoModes();
 		    int currentVideoMode = Config::get().defaultVideoMode();
 
@@ -36,11 +45,11 @@ void DisplaySettings::draw()
 
 		    Config::get().setDefaultVideoMode(currentVideoMode);
 		    ImGui::End();
-		}
 
 
-		if (ImGui::Begin("AntiAlaising"))
-		{
+
+			ImGui::Begin("AntiAlaising");
+		
 			int chosen = 0;
 
 			int& antiAlaisingLevel = Config::get().antiAlaisingLevel();
@@ -97,10 +106,9 @@ void DisplaySettings::draw()
 			}
 
 			ImGui::End();
-		}
+		
 
 	    ImGui::End();
-	}
 }
 
 bool MenuBar::_showPreferenceWidget = false;

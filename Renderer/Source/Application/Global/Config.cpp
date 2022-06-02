@@ -46,7 +46,9 @@ Config::Config()
 	// initialize config properties
 
 	_currentVideoMode = ::GetPrivateProfileInt(TEXT("VideoMode"), TEXT("Resolution"), 0, _configPathBuf);
-	_antialaising= ::GetPrivateProfileInt(TEXT("VideoMode"), TEXT("Antialaising"), 4, _configPathBuf);
+	_antialaising = ::GetPrivateProfileInt(TEXT("VideoMode"), TEXT("Antialaising"), 4, _configPathBuf);
+	_patchVertices = ::GetPrivateProfileInt(TEXT("Renderer"), TEXT("PatchVertices"), 3, _configPathBuf);
+	_polygonMode = ::GetPrivateProfileInt(TEXT("Renderer"), TEXT("PolygonMode"), 0, _configPathBuf);
 }
 
 Config::~Config()
@@ -57,4 +59,10 @@ Config::~Config()
 	::WritePrivateProfileString(TEXT("VideoMode"), TEXT("Resolution"), buf, _configPathBuf);
 	::wsprintf(buf, TEXT("%d"), _antialaising);
 	::WritePrivateProfileString(TEXT("VideoMode"), TEXT("Antialaising"), buf, _configPathBuf);
+	::wsprintf(buf, TEXT("%d"), _patchVertices);
+	::WritePrivateProfileString(TEXT("Renderer"), TEXT("PatchVertices"), buf, _configPathBuf);
+	::wsprintf(buf, TEXT("%d"), _polygonMode);
+	::WritePrivateProfileString(TEXT("Renderer"), TEXT("PolygonMode"), buf, _configPathBuf);
+
+ 
 }

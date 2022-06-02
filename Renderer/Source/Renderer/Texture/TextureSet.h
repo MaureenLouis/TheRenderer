@@ -5,5 +5,6 @@ class TextureSet
 public:
 	std::vector<Ref<Texture2D>> _diffuseMaps;
 	std::vector<Ref<Texture2D>> _normalMaps;
+	std::vector<Ref<Texture2D>> _displacementMaps;
 };
 

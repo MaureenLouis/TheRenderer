@@ -137,14 +137,12 @@ void UiLayer::onUpdate(double deltaTime)
 	//MenuBar::draw();
 
 	// Light position
-	{
 		ImGui::Begin("Default light");
 		glm::vec3& pos = Scene::get().defaultLight()->position();
 		float& lightPower = Scene::get().defaultLight()->lightPower();
 		ImGui::SliderFloat3("Position", glm::value_ptr(pos), -10.0f, 10.f);
 		ImGui::SliderFloat("Light power", &lightPower, 0.f, 30.f);
 		ImGui::End();
-	}
 
 	// Material
 	auto currentEntity = RenderGlobal::get()._currentEntity;
@@ -169,6 +167,13 @@ void UiLayer::onUpdate(double deltaTime)
 		Renderer::releaseVersion(),
 		Application::get().fps());
 	ImGui::End();
+
+	// Tessellation
+	ImGui::Begin("Tessellation");
+	ImGui::Text("Max patch vertices: %s\n",Renderer::maxPatchVertices());
+	ImGui::InputInt("Patch vertices: ", &Config::get()._patchVertices, 1);
+	ImGui::End();
+
 #endif 
 }
 

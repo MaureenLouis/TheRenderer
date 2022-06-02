@@ -50,6 +50,7 @@ Application::ApplicationPrivate::ApplicationPrivate(Application* self)
 	_running = true;
 	_isMinimized = false;
 	_lastFrameTime = 0.0;
+
 }
 
 Application::ApplicationPrivate::~ApplicationPrivate()
@@ -199,6 +200,12 @@ const TCHAR* Application::applicationDir()
 		APP_ERROR("Fail to get application root directory");
 		return nullptr;
 	}
+}
+
+const std::string& Application::textureDir()
+{
+	static std::string texturePath("D:\\Projects\\TheRenderer\\Asset\\Texture\\");
+	return texturePath;
 }
 
 Application::Application()
