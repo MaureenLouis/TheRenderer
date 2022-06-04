@@ -13,6 +13,6 @@ public:
 	glm::vec4 _specularColor;
 	float _glossiness;
 	float _specularLevel;
-
+	float _displacementFactor;
 	TextureSet _textureSet;
 };

@@ -18,6 +18,8 @@ ShaderProgram::ShaderProgram(const char* vertexShaderSouce, const char* fragment
 	glShaderSource(_fragmentShaderHandle, 1, &fragmentShaderSource, nullptr);
 	compileShader(_fragmentShaderHandle);
 
+
+
 	linkShader();
 }
 
@@ -32,8 +34,13 @@ ShaderProgram::ShaderProgram(const char* path)
 	ShaderLoader loader(path);
 	std::string vertexShaderSource = loader.vertexShader();
 	std::string fragmentShaderSource = loader.fragmentShader();
+	std::string tcShaderSoucr = loader.tessellationControlShader();
+	std::string teShaderSoucr = loader.tessellationEvaluateShader();
 	const char* vSrc = vertexShaderSource.c_str();
 	const char* fSrc = fragmentShaderSource.c_str();
+	const char* tcSrc = tcShaderSoucr.c_str();
+	const char* teSrc = teShaderSoucr.c_str();
+
 
 	_vertexShaderHandle = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(_vertexShaderHandle, 1, &vSrc, nullptr);
@@ -42,6 +49,14 @@ ShaderProgram::ShaderProgram(const char* path)
 	_fragmentShaderHandle = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(_fragmentShaderHandle, 1, &fSrc, nullptr);
 	compileShader(_fragmentShaderHandle);
+
+	_tessellationControlShaderHandle = glCreateShader(GL_TESS_CONTROL_SHADER);
+	glShaderSource(_tessellationControlShaderHandle, 1, &tcSrc, nullptr);
+	compileShader(_tessellationControlShaderHandle);
+
+	_tessellationEvaluateShaderHandle = glCreateShader(GL_TESS_EVALUATION_SHADER);
+	glShaderSource(_tessellationEvaluateShaderHandle, 1, &teSrc, nullptr);
+	compileShader(_tessellationEvaluateShaderHandle);
 
 	linkShader();
 }

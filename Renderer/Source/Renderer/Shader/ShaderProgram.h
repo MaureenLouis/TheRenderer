@@ -43,4 +43,6 @@ private:
 	int _vertexShaderHandle;
 	int _fragmentShaderHandle;
 	int _shaderProgramHandle;
+	int _tessellationControlShaderHandle;
+	int _tessellationEvaluateShaderHandle;
 };

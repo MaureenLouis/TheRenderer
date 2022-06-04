@@ -13,6 +13,16 @@ static GLenum shaderTypeFromString(const std::string& type)
 		return GL_FRAGMENT_SHADER;
 	}
 
+	if (type == "tc") /* Tessellation control shader */
+	{
+		return GL_TESS_CONTROL_SHADER;
+	}
+
+	if (type == "te")
+	{
+		return GL_TESS_EVALUATION_SHADER;
+	}
+
 	assert(false);
 	return 0;
 }

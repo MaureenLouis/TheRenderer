@@ -159,6 +159,8 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
 	Ref<TrackBall> trackBall = Scene::get().trackBall();
 	_program->setUniform("viewPos", trackBall->cameraPosition());
 
+    _program->setUniform("displacementFactor", _material->_displacementFactor);
+
     // Texture
 	// glActiveTexture(GL_TEXTURE0);
 	//_texture->bind();
@@ -170,6 +172,9 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
     _material->_textureSet._diffuseMaps[0]->bind();
     _program->setUniform("diffuseMap", 1);
 
+    glActiveTexture(GL_TEXTURE2);
+    _material->_textureSet._displacementMaps[0]->bind();
+    _program->setUniform("displacementMap", 2);
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

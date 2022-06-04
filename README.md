@@ -10,3 +10,6 @@ A teapot model imported from 3dsmax with a simple material.
 
 ## Blinn shader with normal map
 ![image](https://github.com/MaureenLouis/TheRenderer/blob/main/Documentation/Pics/pic_normal_bricks.png)
+
+## DisplacementMap support
+![image](https://github.com/MaureenLouis/TheRenderer/blob/main/Documentation/Pics/pic_displace.png)

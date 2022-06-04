@@ -150,6 +150,7 @@ void UiLayer::onUpdate(double deltaTime)
 	Ref<Material> material = materials[0];
 
 	float f32_one = 0.1f;
+	float displacementFactor = 0.0001f;
 	ImGui::Begin("Material editor");
 	ImGui::ColorEdit3("Ambient Color", glm::value_ptr(material->_ambientColor));
 	ImGui::ColorEdit3("Diffuse Color", glm::value_ptr(material->_diffuseColor));
@@ -157,6 +158,7 @@ void UiLayer::onUpdate(double deltaTime)
 	ImGui::InputScalar("Ambient Level", ImGuiDataType_Float, &(material->_ambientLevel), &f32_one);
 	ImGui::InputScalar("Glossness", ImGuiDataType_Float, &(material->_glossiness), &f32_one);
 	ImGui::InputScalar("Specular Level", ImGuiDataType_Float, &(material->_specularLevel), &f32_one);
+	ImGui::InputScalar("Displacement Factor", ImGuiDataType_Float, &(material->_displacementFactor), &displacementFactor);
 	ImGui::End();
 
 	// Information
