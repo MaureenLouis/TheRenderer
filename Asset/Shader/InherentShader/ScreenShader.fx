@@ -18,8 +18,11 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
+uniform float hdrExposure;
 
 void main()
 {
-	FragColor = texture(screenTexture, TexCoords);
+        vec3 hdrColor = texture(screenTexture, TexCoords);
+         vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);
+    FragColor = vec4(mapped, 1.0);
 }
