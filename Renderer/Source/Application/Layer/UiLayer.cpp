@@ -168,7 +168,19 @@ void UiLayer::onUpdate(double deltaTime)
 		Renderer::rendererName(),
 		Renderer::releaseVersion(),
 		Application::get().fps());
+	// GPU usage
+	int gpuTotalMemKb = 0;
+	glGetIntegerv(0x9048, &gpuTotalMemKb);
+
+	int curAvailMemKb = 0;
+	glGetIntegerv(0x9049, &curAvailMemKb);
+
+	ImGui::Text("GPU usage");
+	ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+	ImGui::ProgressBar(((float)gpuTotalMemKb - (float)curAvailMemKb) / (float)gpuTotalMemKb, ImVec2(0.0f, 0.0f));
 	ImGui::End();
+
+
 
 	// Tessellation
 	ImGui::Begin("Tessellation");
