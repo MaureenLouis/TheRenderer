@@ -63,7 +63,6 @@ Object2D::Object2D(Ref<TrackBall>& trackBall)
 	_program->setUniform("mvp", glm::mat4(1.f));
 
 	_texture = std::make_unique<Texture2D>("D:\\Projects\\TheRenderer\\Asset\\Texture\\wall.jpg");
-
 }
 
 void Object2D::draw()

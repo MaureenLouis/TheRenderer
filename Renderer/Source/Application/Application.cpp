@@ -184,28 +184,33 @@ void Application::registerWindow(Window* window)
 	pImpl->registerWindow(window);
 }
 
-const TCHAR* Application::applicationDir()
+const std::string& Application::applicationDir()
 {
 	long ret = 0;
 	// 获取程序根目录
-	static TCHAR exePathBuf[MAX_PATH];
-	ret = ::GetModuleFileName(NULL, exePathBuf, MAX_PATH);
-	ret = ::PathCchRemoveFileSpec(exePathBuf, MAX_PATH);
-	if (ret != 0)
-	{
-		return exePathBuf;
-	}
-	else
+	static CHAR exePathBuf[MAX_PATH];
+	ret = ::GetModuleFileNameA(NULL, exePathBuf, MAX_PATH);
+	if (ret == 0)
 	{
 		APP_ERROR("Fail to get application root directory");
-		return nullptr;
+		return std::string();
 	}
+
+	std::string exePath(exePathBuf);
+	static std::string appDir = exePath.substr(0, exePath.find_last_of('\\'));
+	return appDir;
 }
 
 const std::string& Application::textureDir()
 {
 	static std::string texturePath("D:\\Projects\\TheRenderer\\Asset\\Texture\\");
 	return texturePath;
+}
+
+const std::string& Application::assetDir()
+{
+	static std::string assetDir = Self::applicationDir() + std::string("\\Asset");
+	return assetDir;
 }
 
 Application::Application()

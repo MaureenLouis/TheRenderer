@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderObject.h"
+#include "InherientObject.h"
 #include "Renderer/Buffer/Buffer.h"
 #include "Renderer/Buffer/VertexArray.h"
 

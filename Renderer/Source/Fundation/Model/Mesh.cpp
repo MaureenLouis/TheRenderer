@@ -162,19 +162,30 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
     _program->setUniform("displacementFactor", _material->_displacementFactor);
 
     // Texture
-	// glActiveTexture(GL_TEXTURE0);
-	//_texture->bind();
-    glActiveTexture(GL_TEXTURE0);
-    _material->_textureSet._normalMaps[0]->bind();
-    _program->setUniform("normalMap", 0);
 
-    glActiveTexture(GL_TEXTURE1);
-    _material->_textureSet._diffuseMaps[0]->bind();
-    _program->setUniform("diffuseMap", 1);
+    auto tex = _material->_textureSet._normalMaps[0];
+    if (tex)
+    {
+		glActiveTexture(GL_TEXTURE0);
+		tex->bind();
+		_program->setUniform("normalMap", 0);
+    }
+    
+	tex = _material->_textureSet._diffuseMaps[0];
+    if (tex)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        tex->bind();
+        _program->setUniform("diffuseMap", 1);
+    }
 
-    glActiveTexture(GL_TEXTURE2);
-    _material->_textureSet._displacementMaps[0]->bind();
-    _program->setUniform("displacementMap", 2);
+    tex = _material->_textureSet._displacementMaps[0];
+    if (tex)
+    {
+        glActiveTexture(GL_TEXTURE2);
+        tex->bind();
+        _program->setUniform("displacementMap", 2);
+    }
 
 	_vertexArray->bind();
 	glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, 0);

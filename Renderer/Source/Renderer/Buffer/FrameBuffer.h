@@ -5,22 +5,19 @@
 
 class FrameBuffer
 {
-	SELF(FrameBuffer);
 public:
 	FrameBuffer(unsigned int width, unsigned int height);
 	~FrameBuffer();
 
 	void bind();
 	void unbind();
-	unsigned int handle() { return _handle; }
-
-	void attachColor(GLenum attachment, Ref<Texture2D>& texture);
-	void attachDepth(Ref<DepthTexture>& texture);
-	void attachStencil(Ref<RenderBuffer>& texture);
-
-	bool verifyFramebufferStatus();
+	unsigned int frameTextureHandle();
 
 private:
-	unsigned int _handle;
-	unsigned int _width, _height;
+	unsigned int _colorTexHandle;
+	unsigned int _depthTexHandle;
+	unsigned int _frameBufhandle;
+	unsigned int _renderBufHandle;
+	unsigned int _width;
+	unsigned int _height;
 };

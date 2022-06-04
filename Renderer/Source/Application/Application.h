@@ -45,8 +45,9 @@ public:
 	void addLayer(Layer* layer);
 	void registerWindow(Window* window);
 
-	static const TCHAR* applicationDir();
+	static const std::string& applicationDir();
 	static const std::string& textureDir();
+	static const std::string& assetDir();
 	
 private:
 	Application();

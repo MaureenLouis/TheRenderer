@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderObject.h"
+#include "InherientObject.h"
 #include "Fundation/Type/Enumerate.h"
 #include "Renderer/Shader/ShaderProgram.h"
 

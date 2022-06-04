@@ -26,8 +26,6 @@ void main()
 {
 	gl_Position = p * v * m * vec4(aPos, 1.f);
 
-
-
     vs_out.FragPos = vec3(m * vec4(aPos, 1.0));   
     vs_out.TexCoords = aTexCoords;   
     

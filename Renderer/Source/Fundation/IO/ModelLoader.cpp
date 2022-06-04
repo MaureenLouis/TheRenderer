@@ -9,7 +9,6 @@ static std::string getFilenameFromPath(std::string&& path)
 	return path.substr(path.find_last_of("\\") + 1);
 }
 
-
 ModelLoaderAssimp::ModelLoaderAssimp(const char* path)
 {
 	Assimp::Importer importer;

@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderObject.h"
+#include "InherientObject.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Texture/Texture.h"
 #include "Fundation/Ref/Unique.h"
@@ -23,6 +23,5 @@ private:
 	Ref<IndexBuffer>      _indexBuffer;
 	Unique<ShaderProgram> _program;
 	Unique<Texture2D>     _texture;
-
 	Ref<TrackBall>        _trackBall;
 };

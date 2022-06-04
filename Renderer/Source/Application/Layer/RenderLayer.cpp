@@ -6,25 +6,25 @@
 #include "Renderer/Scene/Scene.h"
 #include "Application/Global/RenderGlobal.h"
 #include "Renderer/Buffer/FrameBuffer.h"
+#include "Renderer/InherientObject/RenderObject.h"
 
 RenderLayer::RenderLayer()
 {
 	_trackBall = Scene::get().trackBall();
 
 	_gridObject = std::make_unique<GridObject>();
-	//_coordObject = std::make_shared<CoordObject>(_trackBall);
+	_coordObject = std::make_shared<CoordObject>(_trackBall);
 
-	 _teapotEntity = Scene::get().createEntity();
-	 RenderGlobal::get()._currentEntity = _teapotEntity;
-	 Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.fbx");
+	_screenObject = std::make_shared<ScreenObject>();
+	_screenObject->initialize();
+
+	_teapotEntity = Scene::get().createEntity();
+	RenderGlobal::get()._currentEntity = _teapotEntity;
+	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.fbx");
 }
-
 
 void RenderLayer::onAttach()
 {
-	// Viewport
-	glEnable(GL_DEPTH_TEST);
-
 	// Enable alpha channel
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -33,28 +33,9 @@ void RenderLayer::onAttach()
 	int height = Application::getPtr()->window()->height();
 
 	glViewport(0, 0, width, height);
+	_frameBuffer = std::make_unique<FrameBuffer>(width, height);
 
-#if 0
-	RenderGlobal::get()._frameBuffer = std::make_shared<FrameBuffer>(width, height);
-	RenderGlobal::get()._frameBuffer->bind();
-    
-	Ref<Texture2D> colorTexture = std::make_shared<Texture2D>(width, height);
-	RenderGlobal::get()._frameBuffer->attachColor(GL_COLOR_ATTACHMENT0, colorTexture);
-
-	Ref<DepthTexture> depthTexture = std::make_shared<DepthTexture>(width, height);
-	RenderGlobal::get()._frameBuffer->attachDepth(depthTexture);
-
-	Ref<RenderBuffer> renderBuffer = std::make_shared<RenderBuffer>(width, height);
-	RenderGlobal::get()._frameBuffer->attachStencil(renderBuffer);
-
-	if (RenderGlobal::get()._frameBuffer->verifyFramebufferStatus())
-	{
-		APP_INFO("FBO no problem");
-	}
-#endif
-
-
-#if 0
+#if 1
 	// FBO
 	unsigned int& _fbo = RenderGlobal::get()._fbo;
 	glGenFramebuffers(1, &_fbo);
@@ -85,7 +66,6 @@ void RenderLayer::onAttach()
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo);
 
-
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
 	{
 		APP_INFO("FBO complete!");
@@ -95,9 +75,9 @@ void RenderLayer::onAttach()
 
 void RenderLayer::onDetach()
 {
+#if 1
 	glDisable(GL_DEPTH_TEST);
 
-#if 1
 	unsigned int& fbo = RenderGlobal::get()._fbo;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &fbo);
@@ -106,47 +86,34 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
-#if 0
-    unsigned int& fbo = RenderGlobal::get()._fbo;
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-#endif
-
-#if 0
-	RenderGlobal::get()._frameBuffer->bind();
-#endif
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-#if 0
-	_gridObject->shader()->setUniform("m", m);
-	_gridObject->shader()->setUniform("v", v);
-	_gridObject->shader()->setUniform("p", p);
-	_gridObject->draw();
-#endif
-
-
-	// _quad->draw();
-#if 0
-	MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(_teapotEntity);
-	meshComponent.draw();
-#endif
-
+	glBindFramebuffer(GL_FRAMEBUFFER, RenderGlobal::get()._fbo);
 	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
 	for (auto entity : view)
 	{
 		MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
 		meshComponent.draw();
 	}
-
-	//_coordObject->draw();
-
-#if 0
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-#endif
 
-#if 0
-	RenderGlobal::get()._frameBuffer->unbind();
-#endif
+
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(1.f, 1.f, 1.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+	_screenObject->_program->use();
+	glActiveTexture(GL_TEXTURE0);
+	_screenObject->_program->setUniform("screenTexture", 0);
+
+	_screenObject->_vertexArray->bind();
+	glBindTexture(GL_TEXTURE_2D, RenderGlobal::get()._renderTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
 }
 
 void RenderLayer::onEvent(Event& event)
@@ -195,7 +162,6 @@ bool RenderLayer::onMouseScroll(MouseScrollEvent& event)
 {
 	double yOffset = event.yOffset();
 	_trackBall->mouseScroll(this, yOffset);
-
 
 	return true;
 }

@@ -13,6 +13,7 @@
 #include "Renderer/InherientObject/RenderObject.h"
 #include "Renderer/Components/MeshComponent.h"
 #include "Fundation/Model/Model.h"
+#include "Renderer/InherientObject/ScreenObject.h"
 
 FORWARD_DECL(MousePressEvent);
 FORWARD_DECL(MouseReleaseEvent);
@@ -68,9 +69,10 @@ public:
 	// Ref<MeshComponent> _teapot;
 	entt::entity _teapotEntity;
 
+	Ref<ScreenObject> _screenObject;
+	Unique<FrameBuffer> _frameBuffer;
 
 	float _cameraDist;
-
 	unsigned int _rbo;
 	unsigned int _frameTexture;
 	unsigned int _depthTexture;

@@ -18,6 +18,8 @@ ShaderProgram::ShaderProgram(const char* vertexShaderSouce, const char* fragment
 	glShaderSource(_fragmentShaderHandle, 1, &fragmentShaderSource, nullptr);
 	compileShader(_fragmentShaderHandle);
 
+	_tessellationControlShaderHandle = 0;
+	_tessellationEvaluateShaderHandle = 0;
 
 
 	linkShader();
@@ -50,13 +52,23 @@ ShaderProgram::ShaderProgram(const char* path)
 	glShaderSource(_fragmentShaderHandle, 1, &fSrc, nullptr);
 	compileShader(_fragmentShaderHandle);
 
-	_tessellationControlShaderHandle = glCreateShader(GL_TESS_CONTROL_SHADER);
-	glShaderSource(_tessellationControlShaderHandle, 1, &tcSrc, nullptr);
-	compileShader(_tessellationControlShaderHandle);
+	_tessellationControlShaderHandle = 0;
+	_tessellationEvaluateShaderHandle = 0;
 
-	_tessellationEvaluateShaderHandle = glCreateShader(GL_TESS_EVALUATION_SHADER);
-	glShaderSource(_tessellationEvaluateShaderHandle, 1, &teSrc, nullptr);
-	compileShader(_tessellationEvaluateShaderHandle);
+	int ret = ::strcmp(tcSrc, "");
+	if (ret != 0)
+	{
+	    _tessellationControlShaderHandle = glCreateShader(GL_TESS_CONTROL_SHADER);
+	    glShaderSource(_tessellationControlShaderHandle, 1, &tcSrc, nullptr);
+	    compileShader(_tessellationControlShaderHandle);
+	}
+
+	if (ret != 0)
+	{
+	    _tessellationEvaluateShaderHandle = glCreateShader(GL_TESS_EVALUATION_SHADER);
+	    glShaderSource(_tessellationEvaluateShaderHandle, 1, &teSrc, nullptr);
+	    compileShader(_tessellationEvaluateShaderHandle);
+	}
 
 	linkShader();
 }
@@ -73,11 +85,19 @@ void ShaderProgram::linkShader()
 	_shaderProgramHandle = glCreateProgram();
 	glAttachShader(_shaderProgramHandle, _vertexShaderHandle);
 	glAttachShader(_shaderProgramHandle, _fragmentShaderHandle);
+	if (_tessellationControlShaderHandle != 0 && _tessellationEvaluateShaderHandle != 0)
+	{
+		glAttachShader(_shaderProgramHandle, _tessellationControlShaderHandle);
+		glAttachShader(_shaderProgramHandle, _tessellationEvaluateShaderHandle);
+	}
 	glLinkProgram(_shaderProgramHandle);
 	glProgramCheck(_shaderProgramHandle);
 
 	glDeleteShader(_vertexShaderHandle);
 	glDeleteShader(_fragmentShaderHandle);
+	glDeleteShader(_tessellationControlShaderHandle);
+	glDeleteShader(_tessellationEvaluateShaderHandle);
+
 }
 
 
