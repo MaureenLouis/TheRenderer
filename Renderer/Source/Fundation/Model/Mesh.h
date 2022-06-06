@@ -10,13 +10,10 @@ struct Mesh
 	std::vector<Vertex>       _vertices;
 	std::vector<unsigned int> _indices;
 	Ref<Material>             _material;
-	Unique<ShaderProgram> _program;
-	Unique<VertexArray>   _vertexArray;
-	Ref<VertexBuffer>  _vertexBuffer;
-	Ref<IndexBuffer>   _indexBuffer;
-
-	static const char* _vertexShaderSource;
-    static const char* _fragmentShaderSource;
+	Unique<ShaderProgram>     _program;
+	Unique<VertexArray>       _vertexArray;
+	Ref<VertexBuffer>         _vertexBuffer;
+	Ref<IndexBuffer>          _indexBuffer;
 
 	Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, Ref<Material>& material);
 

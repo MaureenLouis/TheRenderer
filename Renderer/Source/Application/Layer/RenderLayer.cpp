@@ -14,9 +14,11 @@ RenderLayer::RenderLayer()
 
 	_gridObject = std::make_unique<GridObject>();
 	_coordObject = std::make_shared<CoordObject>(_trackBall);
-
 	_screenObject = std::make_shared<ScreenObject>();
 	_screenObject->initialize();
+
+	_terrain = std::make_unique<TerrainBase>(32, 32, _trackBall);
+	_terrain->initialize();
 
 	_teapotEntity = Scene::get().createEntity();
 	RenderGlobal::get()._currentEntity = _teapotEntity;
@@ -43,19 +45,24 @@ void RenderLayer::onDetach()
 
 void RenderLayer::onUpdate(double deltaTime)
 {
-
+    // frame->begin();
 	_frameBuffer->bind();
-
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// frame->render();
+	/*
 	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
 	for (auto entity : view)
 	{
 		MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
 		meshComponent.draw();
 	}
+	*/
+	
+	_terrain->draw();
 
+	// frame->end();
 	_frameBuffer->unbind();
 
 	glDisable(GL_DEPTH_TEST);

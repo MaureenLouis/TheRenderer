@@ -14,6 +14,7 @@
 #include "Renderer/Components/MeshComponent.h"
 #include "Fundation/Model/Model.h"
 #include "Renderer/InherientObject/ScreenObject.h"
+#include "Renderer/Terrain/TerrainBase.h"
 
 FORWARD_DECL(MousePressEvent);
 FORWARD_DECL(MouseReleaseEvent);
@@ -72,8 +73,10 @@ public:
 	Ref<ScreenObject> _screenObject;
 	Unique<FrameBuffer> _frameBuffer;
 
+	// Terrain test
+	Unique<TerrainBase> _terrain;
+
+
 	float _cameraDist;
-	unsigned int _rbo;
-	unsigned int _frameTexture;
-	unsigned int _depthTexture;
+
 };

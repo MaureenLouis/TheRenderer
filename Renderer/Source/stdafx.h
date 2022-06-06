@@ -42,6 +42,8 @@
 #include "Fundation/Assert/StaticAssert.h"
 #include "Renderer/Buffer/FrameBuffer.h"
 #include "Application/Application.h"
+#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Buffer/Buffer.h"
 
 // GLM
 #include "glm/glm.hpp"
