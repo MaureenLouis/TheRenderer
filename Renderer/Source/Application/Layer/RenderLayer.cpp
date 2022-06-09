@@ -20,6 +20,9 @@ RenderLayer::RenderLayer()
 	_terrain = std::make_unique<TerrainBase>(32, 32, _trackBall);
 	_terrain->initialize();
 
+	// Fps camera controller
+	
+
 	_teapotEntity = Scene::get().createEntity();
 	RenderGlobal::get()._currentEntity = _teapotEntity;
 	Scene::get().registry().emplace<MeshComponent>(_teapotEntity, _trackBall, "D:\\Projects\\TheRenderer\\Asset\\Model\\Inherient\\normalplane.fbx");
@@ -51,14 +54,16 @@ void RenderLayer::onUpdate(double deltaTime)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// frame->render();
-	/*
+	
+#if 0
 	entt::basic_view view = Scene::get().registry().view<MeshComponent>();
 	for (auto entity : view)
 	{
 		MeshComponent& meshComponent = Scene::get().registry().get<MeshComponent>(entity);
 		meshComponent.draw();
 	}
-	*/
+#endif
+	
 	
 	_terrain->draw();
 

@@ -203,7 +203,7 @@ const std::string& Application::applicationDir()
 
 const std::string& Application::textureDir()
 {
-	static std::string texturePath("D:\\Projects\\TheRenderer\\Asset\\Texture\\");
+	static std::string texturePath = Self::applicationDir() + "\\Asset\\Texture\\";
 	return texturePath;
 }
 

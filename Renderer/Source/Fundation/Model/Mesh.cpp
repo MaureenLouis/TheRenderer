@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include "Renderer/Material/Material.h"
 #include "Renderer/Scene/Scene.h"
-
+#include "Renderer/Components/BasicComponent.h"
 
 
 Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, Ref<Material>& material)
@@ -59,9 +59,6 @@ void Mesh::draw(const glm::mat4& m, const glm::mat4& v, const glm::mat4& p)
     _program->setUniform("ambientLevel", ambientLevel);
 
 	Ref<LightComponent> defaultLight = Scene::get().defaultLight();
-	_program->setUniform("lightColor",defaultLight->color());
-	_program->setUniform("lightPos", defaultLight->position());
-    _program->setUniform("lightPower", defaultLight->lightPower());
 
 	Ref<TrackBall> trackBall = Scene::get().trackBall();
 	_program->setUniform("viewPos", trackBall->cameraPosition());

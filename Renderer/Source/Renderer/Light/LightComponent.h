@@ -5,6 +5,7 @@ class LightComponent
 {
 public:
 	LightComponent();
+	LightComponent(Ref<LightComponent>&& lightComponent);
 
 	void setPosition(const glm::vec3& position)
 	{ _position = position; }

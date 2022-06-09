@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "TextureLoader.h"
 
-TextureLoader::TextureLoader(const char* path)
+TextureLoader::TextureLoader(const char* path, unsigned int channelDesired)
 {
 	_path = path;
-	_data = stbi_load(_path, &_width, &_height, &_channels, 0);
+	_data = stbi_load(_path, &_width, &_height, &_channels, channelDesired);
 	if (!_data)
 	{
 		APP_ERROR("Fail to load image as texture");

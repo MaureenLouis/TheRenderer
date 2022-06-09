@@ -4,8 +4,8 @@
 #include "Application/Context/OpenGLContext.h"
 #include "Application/Event/ApplicationEvent.h"
 #include "Application/Event/MouseEvent.h"
-
-
+#include "Application/Event/KeyEvent.h"
+#include "Application/Device/Keyboard/KeyCode.h"
 
 
 class Window::WindowCallback
@@ -67,7 +67,7 @@ Window::Window()
 
 	glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
 		glViewport(0, 0, width, height);
-		});
+	});
 
 
 	_context = new OpenGLContext(_window);
@@ -138,8 +138,9 @@ void Window::setEventCallback(std::function<void(Event&)> func)
 
 		WindowCloseEvent e;
 		windowData->_callback(e);
-	});
+		});
 
+	/* Mouse button event callback */
 	glfwSetMouseButtonCallback(_window, [](GLFWwindow* window, int button, int action, int mods) {
 		WindowData* windowData = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
@@ -149,28 +150,30 @@ void Window::setEventCallback(std::function<void(Event&)> func)
 
 		switch (action)
 		{
-			case GLFW_PRESS:
-			{
-				MousePressEvent e(button, PointD(xPos, yPos));
-				windowData->_callback(e);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				MouseReleaseEvent e(button, PointD(xPos, yPos));
-				windowData->_callback(e);
-				break;
-			}
+		case GLFW_PRESS:
+		{
+			MousePressEvent e(button, PointD(xPos, yPos));
+			windowData->_callback(e);
+			break;
 		}
-	});
+		case GLFW_RELEASE:
+		{
+			MouseReleaseEvent e(button, PointD(xPos, yPos));
+			windowData->_callback(e);
+			break;
+		}
+		}
+		});
 
+	/* Mouse scroll event callback */
 	glfwSetScrollCallback(_window, [](GLFWwindow* window, double xOffset, double yOffset) {
 		WindowData* windowData = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 		MouseScrollEvent e(xOffset, yOffset);
 		windowData->_callback(e);
-	});
+		});
 
+	/* Cursor position event callback */
 	glfwSetCursorPosCallback(_window, [](GLFWwindow* window, double x, double y) {
 		WindowData* windowData = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
@@ -178,7 +181,7 @@ void Window::setEventCallback(std::function<void(Event&)> func)
 		int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (state == GLFW_PRESS)
 		{
-		    e.addKeyPressed(MouseCode::ButtonLeft);
+			e.addKeyPressed(MouseCode::ButtonLeft);
 		}
 
 		state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
@@ -188,6 +191,33 @@ void Window::setEventCallback(std::function<void(Event&)> func)
 		}
 
 		windowData->_callback(e);
+		});
+
+	/* Keyboard event callback */
+	glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+		WindowData* windowData = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+        
+		switch (action)
+		{
+		case GLFW_PRESS:
+		    {
+			    KeyPressedEvent e(Keyboard::KeyCode(key), 0u);
+			    windowData->_callback(e); 
+		    }
+			break;
+		case GLFW_RELEASE:
+		    {
+			    KeyReleasedEvent e(Keyboard::KeyCode(key));
+			    windowData->_callback(e);
+		    }
+			break;
+		case GLFW_REPEAT:
+    		{
+		    	KeyPressedEvent e(Keyboard::KeyCode(key), 1u);
+		    	windowData->_callback(e);
+	    	}
+			break;
+		}
 	});
 }
 

@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <unordered_map>
+#include <bitset>
 
 // The Renderer
 #include "Fundation/Log/Log.h"
@@ -44,6 +45,7 @@
 #include "Application/Application.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/Buffer.h"
+#include "Fundation/Type/PodType.h"
 
 // GLM
 #include "glm/glm.hpp"

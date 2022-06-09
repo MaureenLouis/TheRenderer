@@ -1,5 +1,21 @@
 #include "stdafx.h"
 #include "TerrainBase.h"
+#include "Renderer/Texture/TextureLoader.h"
+
+void TerrainBase::loadHeightMap()
+{
+
+}
+
+void TerrainBase::normalizeHeightMap()
+{
+
+}
+
+void TerrainBase::shutdownHeightMap()
+{
+
+}
 
 const char* TerrainBase::_vertexShader = R"(
 #version 330 core
@@ -30,14 +46,30 @@ TerrainBase::TerrainBase(unsigned int width, unsigned int height, Ref<TrackBall>
 
 void TerrainBase::initialize()
 {
+	const std::string& textureDir = Application::textureDir();
+	std::string heightMapPath = textureDir + "TerrainHeightMap.bmp";
+
+	TextureLoader heightMapLoader(heightMapPath.c_str(), 1u);
+
+	_heightMapData = heightMapLoader.data();
+
+	_width = heightMapLoader.textureWidth();
+	_height = heightMapLoader.textureHeight();
+
 	// Generate a grid
-	for (int j = 0; j <= _width; ++j)
-	{
-		for (int i = 0; i <= _height; ++i)
+	int pixelIndex = 0;
+	for (int j = 0; j <= _width; ++j)        // Col
+	{ 
+		for (int i = 0; i <= _height; ++i)   // Row
 		{
-			float x = (float)i ;
-			float z = (float)j ;
-			float y = 0.f;
+			unsigned char pixelData = _heightMapData[i * _width + j];
+
+			float x = (float)i * 1.f;
+			float y = (float)(unsigned int)pixelData / 5.f;
+			float z = (float)j * 1.f;
+
+
+			/* Get a pixel from heightmap as terrain vertex data. */
 			_gridVertices.push_back(glm::vec3(x, y, z));
 		}
 	}
@@ -82,12 +114,18 @@ void TerrainBase::draw()
 	glm::mat4& p = _trackBall->project();
 	glm::mat4& v = _trackBall->viewMatrix();
 
+
+
 	_shader->use();
 	_shader->setUniform("mvp", p * v * m);
-	_shader->setUniform("debugGridColor", glm::vec4(0.5f, 0.5f, 0.5f, 0.5f));
+	_shader->setUniform("debugGridColor", glm::vec4(0.5f, 0.5f, 0.5f, 1.f));
 
 	_array->bind();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	int& polygonMode = Config::get()._polygonMode;
+	if (polygonMode == 1)
+	    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glDrawElements(GL_TRIANGLES, _indices->count(), GL_UNSIGNED_INT, 0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

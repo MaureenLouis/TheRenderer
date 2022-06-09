@@ -2,12 +2,11 @@
 #include "Layer.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "Renderer/Camera/PerspectiveCamera.h"
+#include "Renderer/Camera/TargetCamera.h"
 #include "Renderer/InherientObject/AxisObject.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/InherientObject/2dObject.h"
 #include "Renderer/InherientObject/GridObject.h"
-#include "Renderer/Camera/FpsCameraController.h"
 #include "Renderer/Camera/TrackBall.h"
 #include "Renderer/InherientObject/CoordObject.h"
 #include "Renderer/InherientObject/RenderObject.h"
@@ -54,7 +53,7 @@ public:
 	Unique<GridObject> _gridObject;
 
 	Unique<Object2D> _quad;
-	Unique<PerspectiveCamera> _camera;
+	// Unique<PerspectiveCamera> _camera;
 
 	PointD _oldPos;
 	PointD _deltaPos;
@@ -64,7 +63,7 @@ public:
 	
 	Unique<Model> _model;
 
-	Unique<FpsCameraController> _controller;
+
 	Ref<TrackBall> _trackBall;
 	Ref<CoordObject> _coordObject;
 	// Ref<MeshComponent> _teapot;

@@ -6,6 +6,7 @@
 class Scene
 {
 	GENERATE_SINGLETON(Scene);
+	SELF(Scene);
 
 private:
 	Scene();
@@ -30,7 +31,7 @@ public:
 	}
 	
 private:
-	entt::registry m_registry;
+	entt::registry      m_registry;
 
 	Ref<LightComponent> _defaultLight;
 	Ref<TrackBall>      _trackBall;

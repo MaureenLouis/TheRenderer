@@ -3,7 +3,7 @@
 class TextureLoader
 {
 public:
-	TextureLoader(const char* path);
+	TextureLoader(const char* path, unsigned int channelDesired = 0u);
 	~TextureLoader();
 
 	int textureWidth() { return _width; }

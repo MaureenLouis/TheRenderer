@@ -27,7 +27,7 @@ Enumerate(EventType, uint32_t,
 	MouseButtonPressed,
 	MouseButtonReleased,
 	MouseMoved,
-	MouseScrolled);
+	MouseScrolled, KeyPressed, KeyReleased, KeyTyped);
 
 class Event
 {
