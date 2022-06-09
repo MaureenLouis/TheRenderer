@@ -8,6 +8,7 @@
 #include "Renderer/Buffer/FrameBuffer.h"
 #include "Renderer/InherientObject/RenderObject.h"
 
+
 RenderLayer::RenderLayer()
 {
 	_trackBall = Scene::get().trackBall();
@@ -91,8 +92,19 @@ void RenderLayer::onEvent(Event& event)
 	d.dispatch<MouseReleaseEvent>(EVENT_CALLBACK(&Self::onMouseRelease));
 	d.dispatch<MouseScrollEvent>(EVENT_CALLBACK (&Self::onMouseScroll));
 	d.dispatch<MouseMoveEvent>(EVENT_CALLBACK(&Self::onMouseMove));
+	d.dispatch<KeyPressedEvent>(EVENT_CALLBACK(&Self::onKeyPressed));
+	d.dispatch<KeyReleasedEvent>(EVENT_CALLBACK(&Self::onKeyReleased));
 }
 
+bool RenderLayer::onKeyPressed(KeyPressedEvent& event)
+{
+	return true;
+}
+
+bool RenderLayer::onKeyReleased(KeyReleasedEvent& event)
+{
+	return true;
+}
 
 bool RenderLayer::onMousePress(MousePressEvent& event)
 {

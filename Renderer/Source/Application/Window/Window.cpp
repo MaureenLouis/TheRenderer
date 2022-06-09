@@ -5,7 +5,6 @@
 #include "Application/Event/ApplicationEvent.h"
 #include "Application/Event/MouseEvent.h"
 #include "Application/Event/KeyEvent.h"
-#include "Application/Device/Keyboard/KeyCode.h"
 
 
 class Window::WindowCallback
@@ -128,6 +127,8 @@ int Window::height() const
 	return _currentWindowHeight;
 }
 
+
+
 void Window::setEventCallback(std::function<void(Event&)> func)
 {
 	_windowData._callback = func;
@@ -194,26 +195,27 @@ void Window::setEventCallback(std::function<void(Event&)> func)
 		});
 
 	/* Keyboard event callback */
-	glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+	glfwSetKeyCallback(_window, 
+		[](GLFWwindow* window, int key, int scancode, int action, int mods){
 		WindowData* windowData = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
         
 		switch (action)
 		{
 		case GLFW_PRESS:
 		    {
-			    KeyPressedEvent e(Keyboard::KeyCode(key), 0u);
+			    KeyPressedEvent e((Keyboard::KeyCode)key, 0u);
 			    windowData->_callback(e); 
 		    }
 			break;
 		case GLFW_RELEASE:
 		    {
-			    KeyReleasedEvent e(Keyboard::KeyCode(key));
-			    windowData->_callback(e);
+			    KeyReleasedEvent e((Keyboard::KeyCode)key);
+				windowData->_callback(e);
 		    }
 			break;
 		case GLFW_REPEAT:
     		{
-		    	KeyPressedEvent e(Keyboard::KeyCode(key), 1u);
+		    	KeyPressedEvent e((Keyboard::KeyCode)key, 1u);
 		    	windowData->_callback(e);
 	    	}
 			break;

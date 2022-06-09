@@ -38,6 +38,8 @@ private:
 	bool onMouseRelease(MouseReleaseEvent& event);
 	bool onMouseScroll(MouseScrollEvent& event);
 	bool onMouseMove(MouseMoveEvent& event);
+	bool onKeyPressed(KeyPressedEvent& event);
+	bool onKeyReleased(KeyReleasedEvent& event);
 
 public:
 	glm::mat4 p;

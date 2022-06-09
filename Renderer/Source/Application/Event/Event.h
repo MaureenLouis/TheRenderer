@@ -27,7 +27,10 @@ Enumerate(EventType, uint32_t,
 	MouseButtonPressed,
 	MouseButtonReleased,
 	MouseMoved,
-	MouseScrolled, KeyPressed, KeyReleased, KeyTyped);
+	MouseScrolled, 
+	KeyPressed, 
+	KeyReleased, 
+	KeyTyped);
 
 class Event
 {
@@ -42,6 +45,7 @@ public:
 	virtual EventType eventType() const = 0;
 	virtual const char* name() const = 0;
 	virtual EventCategory eventCategory() const = 0;
+	virtual std::string toString() { return std::string(); }
 
 	const bool handled() const 
 	{

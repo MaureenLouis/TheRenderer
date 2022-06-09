@@ -13,9 +13,3 @@ KeyPressedEvent::KeyPressedEvent(const Keyboard::KeyCode keyCode, unsigned short
 {
 }
 
-KeyReleasedEvent::KeyReleasedEvent(const Keyboard::KeyCode keyCode)
-	: KeyEvent(keyCode)
-{
-
-}
-
